@@ -26,7 +26,6 @@ public class Type extends BaseEntity {
     }
 
 
-    @JsonIgnore
     @OneToMany(mappedBy = "type" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Card> cards = new HashSet<>();
     public Set<Card> getCards() {

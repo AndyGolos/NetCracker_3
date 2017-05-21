@@ -32,6 +32,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = Converter.roleDtoToRoleEntityConverter(roleDto);
         try {
             roleDao.save(role);
+            logger.info("Role" + role + "successfully saved!");
         } catch (DaoException dao) {
             logger.error("Error was thrown in service: " + dao);
             throw new ServiceException();

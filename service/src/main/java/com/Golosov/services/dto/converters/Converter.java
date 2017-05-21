@@ -3,13 +3,11 @@ package com.Golosov.services.dto.converters;
 import com.Golosov.entities.*;
 import com.Golosov.services.dto.dto.*;
 
-import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.concurrent.locks.Lock;
 
 /**
  * Created by Андрей on 18.05.2017.
@@ -17,59 +15,78 @@ import java.util.concurrent.locks.Lock;
 public class Converter {
 
     public static UserDto userEntityToUserDtoConverter(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setSurname(user.getSurname());
-        userDto.setLastname(user.getLastname());
-        userDto.setEmail(user.getPassword());
-        userDto.setPassword(user.getPassword());
-        userDto.setBirth(localDateToStringConverter(user.getdateOfBirth()));
-        userDto.setRegistration(localDateToStringConverter(user.getRegistration()));
+        UserDto userDto = null;
+        if(user!=null){
+            userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setName(user.getName());
+            userDto.setSurname(user.getSurname());
+            userDto.setLastname(user.getLastname());
+            userDto.setEmail(user.getEmail());
+            userDto.setPassword(user.getPassword());
+            userDto.setBirth(localDateToStringConverter(user.getdateOfBirth()));
+            userDto.setRegistration(localDateToStringConverter(user.getRegistration()));
+        }
         return userDto;
     }
 
+
     public static TypeDto typeEntityToTypeDtoConverter(Type type) {
-        TypeDto typeDto = new TypeDto();
-        typeDto.setId(type.getId());
-        typeDto.setType(type.getType());
+        TypeDto typeDto = null;
+        if (type != null) {
+            typeDto = new TypeDto();
+            typeDto.setId(type.getId());
+            typeDto.setType(type.getType());
+        }
         return typeDto;
     }
 
     public static RoleDto roleEntityToRoleDtoConverter(Role role) {
-        RoleDto roleDto = new RoleDto();
-        roleDto.setId(role.getId());
-        roleDto.setRole(role.getRole());
+        RoleDto roleDto = null;
+        if (role != null){
+            roleDto = new RoleDto();
+            roleDto.setId(role.getId());
+            roleDto.setRole(role.getRole());
+        }
         return roleDto;
     }
 
     public static BillDto billEntityToBillDtoConverter(Bill bill) {
-        BillDto billDto = new BillDto();
-        billDto.setId(bill.getId());
-        billDto.setMoney(bill.getMoney());
-        billDto.setPassword(bill.getPassword());
+        BillDto billDto = null;
+        if(bill!=null){
+            billDto = new BillDto();
+            billDto.setId(bill.getId());
+            billDto.setMoney(bill.getMoney());
+            billDto.setPassword(bill.getPassword());
+        }
         return billDto;
     }
 
     public static HistoryDto historyEntityToHistoryDtoConverter(History history) {
-        HistoryDto historyDto = new HistoryDto();
-        historyDto.setId(history.getId());
-        historyDto.setCardId(history.getCard().getId());
-        historyDto.setOperationTime(calendarToStringConverter(history.getOperationTime()));
-        historyDto.setValueChange(history.getValueChange());
+        HistoryDto historyDto = null;
+        if(history!=null){
+            historyDto = new HistoryDto();
+            historyDto.setId(history.getId());
+            historyDto.setCardId(history.getCard().getId());
+            historyDto.setOperationTime(calendarToStringConverter(history.getOperationTime()));
+            historyDto.setValueChange(history.getValueChange());
+        }
         return historyDto;
     }
 
     public static CardDto cardEntityToCardDtoConverter(Card card) {
-        CardDto cardDto = new CardDto();
-        cardDto.setId(card.getId());
-        cardDto.setBillId(card.getBill().getId());
-        cardDto.setUserId(card.getUser().getId());
-        cardDto.setActive(card.isStatus());
-        cardDto.setPassword(card.getPassword());
-        cardDto.setType(card.getType().getType());
-        cardDto.setRegistration(localDateToStringConverter(card.getRegistration()));
-        cardDto.setValidity(localDateToStringConverter(card.getValidity()));
+        CardDto cardDto = null;
+        if(card!=null){
+            cardDto = new CardDto();
+            cardDto.setId(card.getId());
+            cardDto.setBillId(card.getBill().getId());
+            cardDto.setUserId(card.getUser().getId());
+            cardDto.setActive(card.isStatus());
+            cardDto.setPassword(card.getPassword());
+            cardDto.setType(card.getType().getId());
+            cardDto.setRegistration(localDateToStringConverter(card.getRegistration()));
+            cardDto.setValidity(localDateToStringConverter(card.getValidity()));
+        }
         return cardDto;
     }
 
@@ -132,7 +149,7 @@ public class Converter {
         card.setUser(user);
 
         Type type = new Type();
-        type.setType(cardDto.getType());
+        type.setId(cardDto.getType());
         card.setType(type);
 
         card.setId(cardDto.getId());
@@ -145,12 +162,12 @@ public class Converter {
     }
 
     private static LocalDate stringToLocalDateConverter(String date) {
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd.mm.yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return LocalDate.parse(date, timeFormatter);
     }
 
     private static Calendar stringToCalendarConverter(String time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss dd.mm.yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.setTime(dateFormat.parse(time));

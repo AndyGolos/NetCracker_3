@@ -1,7 +1,11 @@
 package com.Golosov.services.implementations;
 
-import com.Golosov.dao.interfaces.CardDao;
+import com.Golosov.builders.HistoryBuilder;
+import com.Golosov.dao.interfaces.*;
+import com.Golosov.entities.Bill;
 import com.Golosov.entities.Card;
+import com.Golosov.entities.History;
+import com.Golosov.entities.Type;
 import com.Golosov.exceptions.DaoException;
 import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.CardDto;
@@ -12,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Андрей on 17.05.2017.
@@ -28,6 +29,14 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardDao cardDao;
+    @Autowired
+    private HistoryDao historyDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private TypeDao typeDao;
+    @Autowired
+    private BillDao billDao;
 
     @Override
     public long save(CardDto cardDto) {
@@ -129,8 +138,41 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    //TODO поправить метод
     @Override
-    public void replenishCard(long cardId, String cardPassword, long cardTransferId, long summ) {
-        //TODO
+    public boolean replenishCard(long cardId, String cardPassword, long cardTransferId, long summ) {
+        Card card = cardDao.getById(cardId);
+        if (card.getPassword().equals(cardPassword)) {
+            Card transferCard = cardDao.getById(cardTransferId);
+            Bill bill = billDao.getById(card.getBill().getId());
+            if (bill.getMoney() - summ < 0) {
+                return false;
+            } else {
+                bill.setMoney(bill.getMoney() - summ);
+                cardDao.update(card);
+
+                History history = new HistoryBuilder
+                        .HistoryEntityBuilder()
+                        .card(card)
+                        .operationTime(Calendar.getInstance())
+                        .valueChange("-" + summ)
+                        .build();
+                historyDao.save(history);
+
+                Bill billTransferCard = billDao.getById(transferCard.getBill().getId());
+                billTransferCard.setMoney(billTransferCard.getMoney() + summ);
+                cardDao.update(transferCard);
+
+                History historytransfer = new HistoryBuilder
+                        .HistoryEntityBuilder()
+                        .card(transferCard)
+                        .operationTime(Calendar.getInstance())
+                        .valueChange("+" + summ)
+                        .build();
+                historyDao.save(historytransfer);
+                return true;
+            }
+        } else
+            return false;
     }
 }

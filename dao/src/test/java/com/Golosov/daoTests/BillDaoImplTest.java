@@ -6,9 +6,12 @@ import com.Golosov.entities.Bill;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by Андрей on 17.05.2017.
@@ -35,16 +38,16 @@ public class BillDaoImplTest {
     }
 
     @Test
+    @Rollback
     public void testSave() {
         long id = billDao.save(actualBill);
 
         expectedBill = billDao.getById(id);
         Assert.assertEquals("testSave() method failed: ", actualBill, expectedBill);
-
-        billDao.delete(id);
     }
 
     @Test
+    @Rollback
     public void testDelete() {
         long id = billDao.save(actualBill);
 
@@ -55,6 +58,7 @@ public class BillDaoImplTest {
     }
 
     @Test
+    @Rollback
     public void testUpdate() {
         long id = billDao.save(actualBill);
 
@@ -63,28 +67,36 @@ public class BillDaoImplTest {
 
         expectedBill = billDao.getById(id);
         Assert.assertEquals("testUpdate() method failed: ", actualBill, expectedBill);
-
-        billDao.delete(id);
     }
 
     @Test
+    @Rollback
     public void testGetById() {
         long id = billDao.save(actualBill);
 
         expectedBill = billDao.getById(id);
         Assert.assertEquals("testGetById() method failed: ", actualBill, expectedBill);
-
-        billDao.delete(id);
     }
 
-    @Ignore
     @Test
+    @Rollback
     public void testGetAll() {
+        billDao.save(actualBill);
 
+        Bill bill= new BillBuilder
+                .BillEntityBuilder()
+                .money(100)
+                .password("1111")
+                .build();
+        billDao.save(bill);
+
+        List<Bill> bills = billDao.getAll();
+        Assert.assertTrue("testGetAll() method failed: ",bills.size()>=2);
     }
 
 
     @Test
+    @Rollback
     public void testSetMoney() {
         long id = billDao.save(actualBill);
         long money = 200;
@@ -92,8 +104,6 @@ public class BillDaoImplTest {
 
         expectedBill = billDao.getById(id);
         Assert.assertEquals("testSetMoney() method failed: ", actualBill, expectedBill);
-
-        billDao.delete(id);
     }
 
     @After

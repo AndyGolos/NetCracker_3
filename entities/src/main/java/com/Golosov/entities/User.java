@@ -90,7 +90,6 @@ public class User extends BaseEntity{
         this.roles = roles;
     }
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Card> cards = new HashSet<>();
     public Set<Card> getCards() {

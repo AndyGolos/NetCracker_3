@@ -24,7 +24,6 @@ public class Role extends BaseEntity {
     }
 
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
     public Set<User> getUsers() {

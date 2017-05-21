@@ -25,7 +25,7 @@ public class HistoryDaoImpl extends AbstractDao<History> implements HistoryDao {
     }
 
     @Override
-    public Set<History> getHistoriesById(long id) {
+    public Set<History> getHistoriesByCardId(long id) {
         Set<History> histories = null;
         try {
             Card card = entityManager.find(Card.class, id);

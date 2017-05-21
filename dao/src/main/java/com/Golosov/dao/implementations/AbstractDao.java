@@ -18,7 +18,7 @@ public abstract class AbstractDao<T extends BaseEntity> implements BaseDao<T> {
 
     private static Logger logger = Logger.getLogger(AbstractDao.class);
 
-    public AbstractDao(Class<T> persistentClass, String hql) {
+    AbstractDao(Class<T> persistentClass, String hql) {
         this.persistentClass = persistentClass;
         this.hql = hql;
     }

@@ -9,12 +9,14 @@ import com.Golosov.entities.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Андрей on 17.05.2017.
@@ -84,44 +86,37 @@ public class HistoryDaoImplTest {
 
 
     @Test
+    @Rollback
     public void testSave() {
-
-        long billId = saveBill(bill);
-        long userId = saveUser(user);
-        long cardId = saveCard(card);
+        saveBill(bill);
+        saveUser(user);
+        saveCard(card);
         long historyId = saveHistory(actualHistory);
 
         expectedHistory = historyDao.getById(historyId);
-
         Assert.assertEquals("testSave() method failed: ", actualHistory, expectedHistory);
-
-        delete(historyId, cardId, userId, billId);
     }
 
     @Test
+    @Rollback
     public void testDelete() {
-
-        long billId = saveBill(bill);
-        long userId = saveUser(user);
-        long cardId = saveCard(card);
+        saveBill(bill);
+        saveUser(user);
+        saveCard(card);
         long historyId = saveHistory(actualHistory);
 
         historyDao.delete(historyId);
+
         expectedHistory = historyDao.getById(historyId);
-
         Assert.assertNull("testDelete() method failed: ", expectedHistory);
-
-        deleteCard(cardId);
-        deleteBill(billId);
-        deleteUser(userId);
     }
 
     @Test
+    @Rollback
     public void testUpdate() {
-
-        long billId = saveBill(bill);
-        long userId = saveUser(user);
-        long cardId = saveCard(card);
+        saveBill(bill);
+        saveUser(user);
+        saveCard(card);
         long historyId = saveHistory(actualHistory);
 
         actualHistory.setValueChange("-300");
@@ -129,34 +124,45 @@ public class HistoryDaoImplTest {
 
         expectedHistory = historyDao.getById(historyId);
         Assert.assertEquals("testUpdate() method failed: ", actualHistory, expectedHistory);
-
-        delete(historyId, cardId, userId, billId);
     }
 
     @Test
+    @Rollback
     public void testGetById() {
-
-        long billId = saveBill(bill);
-        long userId = saveUser(user);
-        long cardId = saveCard(card);
+        saveBill(bill);
+        saveUser(user);
+        saveCard(card);
         long historyId = saveHistory(actualHistory);
 
         expectedHistory = historyDao.getById(historyId);
-
         Assert.assertEquals("testGetById() method failed: ", actualHistory, expectedHistory);
-
-        delete(historyId, cardId, userId, billId);
     }
 
-    @Ignore
     @Test
+    @Rollback
     public void testGetAll(){
+        saveBill(bill);
+        saveUser(user);
+        saveCard(card);
+        long historyId = saveHistory(actualHistory);
 
+        History history = new HistoryBuilder
+                .HistoryEntityBuilder()
+                .operationTime(Calendar.getInstance())
+                .valueChange("+4400")
+                .card(card)
+                .build();
+        historyDao.save(history);
+
+        List<History> histories = historyDao.getAll();
+        Assert.assertTrue("testGetById() method failed: ",histories.size()>=2);
     }
 
+    //TODO
     @Ignore
     @Test
-    public void testGetHistoriesById(){
+    @Rollback
+    public void testGetHistoriesByCardId(){
 
     }
 
@@ -185,31 +191,4 @@ public class HistoryDaoImplTest {
     private long saveHistory(History history) {
         return historyDao.save(history);
     }
-
-    private void deleteCard(long cardId) {
-        cardDao.delete(cardId);
-    }
-
-    private void deleteUser(long userId) {
-        userDao.delete(userId);
-    }
-
-    private void deleteBill(long billId) {
-        billDao.delete(billId);
-    }
-
-    private void deleteHistory(long historyId) {
-        historyDao.delete(historyId);
-    }
-
-    private void delete(long historyId, long cardId, long userId, long billId) {
-        deleteHistory(historyId);
-        deleteCard(cardId);
-        deleteUser(userId);
-        deleteBill(billId);
-    }
-
-
-
-
 }

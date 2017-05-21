@@ -20,8 +20,7 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
         super(Role.class, FROM_ROLE);
     }
 
-    public Set<Role> getRolesById(long id) {
-
+    public Set<Role> getRolesByUserId(long id) {
         User user = entityManager.find(User.class,id);
         return user.getRoles();
     }

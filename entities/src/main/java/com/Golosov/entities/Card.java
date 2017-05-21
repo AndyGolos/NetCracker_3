@@ -44,7 +44,6 @@ public class Card extends BaseEntity{
         this.type = type;
     }
 
-    @JsonIgnore
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<History> histories = new HashSet<>();
     public Set<History> getHistories() {
@@ -91,7 +90,7 @@ public class Card extends BaseEntity{
         this.validity = validity;
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -118,6 +117,36 @@ public class Card extends BaseEntity{
         result = 31 * result + (status ? 1 : 0);
         result = 31 * result + registration.hashCode();
         result = 31 * result + validity.hashCode();
+        return result;
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Card card = (Card) o;
+
+        if (status != card.status) return false;
+        if (user != null ? !user.equals(card.user) : card.user != null) return false;
+        if (bill != null ? !bill.equals(card.bill) : card.bill != null) return false;
+        if (type != null ? !type.equals(card.type) : card.type != null) return false;
+        if (password != null ? !password.equals(card.password) : card.password != null) return false;
+        if (registration != null ? !registration.equals(card.registration) : card.registration != null) return false;
+        return validity != null ? validity.equals(card.validity) : card.validity == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (bill != null ? bill.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (status ? 1 : 0);
+        result = 31 * result + (registration != null ? registration.hashCode() : 0);
+        result = 31 * result + (validity != null ? validity.hashCode() : 0);
         return result;
     }
 

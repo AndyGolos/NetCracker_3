@@ -45,7 +45,7 @@ public class HistoryServiceImpl implements HistoryService {
     public Set<HistoryDto> findCardHistory(long cardId) {
         Set<HistoryDto> historyDtos = new HashSet<>();
         try {
-            Set<History> histories = historyDao.getHistoriesById(cardId);
+            Set<History> histories = historyDao.getHistoriesByCardId(cardId);
             histories.forEach(history -> {
                 HistoryDto historyDto = Converter.historyEntityToHistoryDtoConverter(history);
                 historyDtos.add(historyDto);

@@ -77,4 +77,45 @@ public class UserDto extends BaseDto {
     public void setRegistration(String registration) {
         this.registration = registration;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDto userDto = (UserDto) o;
+
+        if (name != null ? !name.equals(userDto.name) : userDto.name != null) return false;
+        if (lastname != null ? !lastname.equals(userDto.lastname) : userDto.lastname != null) return false;
+        if (surname != null ? !surname.equals(userDto.surname) : userDto.surname != null) return false;
+        if (email != null ? !email.equals(userDto.email) : userDto.email != null) return false;
+        if (password != null ? !password.equals(userDto.password) : userDto.password != null) return false;
+        if (birth != null ? !birth.equals(userDto.birth) : userDto.birth != null) return false;
+        return registration != null ? registration.equals(userDto.registration) : userDto.registration == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (birth != null ? birth.hashCode() : 0);
+        result = 31 * result + (registration != null ? registration.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", birth='" + birth + '\'' +
+                ", registration='" + registration + '\'' +
+                '}';
+    }
 }

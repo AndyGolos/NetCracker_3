@@ -9,5 +9,5 @@ import java.util.Set;
  */
 public interface RoleDao extends BaseDao<Role> {
 
-    Set<Role> getRolesById(long id);
+    Set<Role> getRolesByUserId(long id);
 }

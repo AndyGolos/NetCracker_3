@@ -34,7 +34,6 @@ public class Bill extends BaseEntity {
         this.password = password;
     }
 
-    @JsonIgnore
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private Set<Card> cards = new HashSet<>();
     public Set<Card> getCards() {
@@ -53,14 +52,14 @@ public class Bill extends BaseEntity {
         Bill bill = (Bill) o;
 
         if (money != bill.money) return false;
-        return password.equals(bill.password);
+        return password != null ? password.equals(bill.password) : bill.password == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (int) (money ^ (money >>> 32));
-        result = 31 * result + password.hashCode();
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 

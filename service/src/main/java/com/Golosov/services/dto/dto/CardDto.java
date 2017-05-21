@@ -3,12 +3,12 @@ package com.Golosov.services.dto.dto;
 /**
  * Created by Андрей on 18.05.2017.
  */
-public class CardDto extends BaseDto{
+public class CardDto extends BaseDto {
 
     private long id;
     private long billId;
     private long userId;
-    private String type;
+    private long type;
     private String password;
     private boolean isActive;
     private String registration;
@@ -38,11 +38,11 @@ public class CardDto extends BaseDto{
         this.userId = userId;
     }
 
-    public String getType() {
+    public long getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(long type) {
         this.type = type;
     }
 
@@ -76,5 +76,47 @@ public class CardDto extends BaseDto{
 
     public void setValidity(String validity) {
         this.validity = validity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CardDto cardDto = (CardDto) o;
+
+        if (billId != cardDto.billId) return false;
+        if (userId != cardDto.userId) return false;
+        if (type != cardDto.type) return false;
+        if (isActive != cardDto.isActive) return false;
+        if (password != null ? !password.equals(cardDto.password) : cardDto.password != null) return false;
+        if (registration != null ? !registration.equals(cardDto.registration) : cardDto.registration != null)
+            return false;
+        return validity != null ? validity.equals(cardDto.validity) : cardDto.validity == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (billId ^ (billId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (type ^ (type >>> 32));
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (isActive ? 1 : 0);
+        result = 31 * result + (registration != null ? registration.hashCode() : 0);
+        result = 31 * result + (validity != null ? validity.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CardDto{" +
+                "billId=" + billId +
+                ", userId=" + userId +
+                ", type=" + type +
+                ", password='" + password + '\'' +
+                ", isActive=" + isActive +
+                ", registration='" + registration + '\'' +
+                ", validity='" + validity + '\'' +
+                '}';
     }
 }

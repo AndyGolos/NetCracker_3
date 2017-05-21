@@ -9,5 +9,5 @@ import java.util.Set;
  */
 public interface HistoryDao extends BaseDao<History> {
 
-    Set<History> getHistoriesById(long id);
+    Set<History> getHistoriesByCardId(long id);
 }

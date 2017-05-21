@@ -14,11 +14,14 @@ import com.Golosov.entities.User;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Андрей on 17.05.2017.
@@ -78,6 +81,7 @@ public class CardDaoImplTest {
     }
 
     @Test
+    @Rollback
     public void testSave() {
 
         long billId = saveBill(bill);
@@ -86,11 +90,10 @@ public class CardDaoImplTest {
 
         expectedCard = cardDao.getById(cardId);
         Assert.assertEquals("testSave() method failed: ", actualCard, expectedCard);
-
-        delete(cardId, userId, billId);
     }
 
     @Test
+    @Rollback
     public void testDelete() {
 
         long billId = saveBill(bill);
@@ -100,12 +103,10 @@ public class CardDaoImplTest {
         cardDao.delete(cardId);
         expectedCard = cardDao.getById(cardId);
         Assert.assertNull("testDelete() method failed: ", expectedCard);
-
-        deleteUser(userId);
-        deleteBill(billId);
     }
 
     @Test
+    @Rollback
     public void testUpdate() {
 
         long billId = saveBill(bill);
@@ -117,11 +118,10 @@ public class CardDaoImplTest {
 
         expectedCard = cardDao.getById(cardId);
         Assert.assertEquals("testUpdate() method failed: " , actualCard, expectedCard);
-
-        delete(cardId,userId,billId);
     }
 
     @Test
+    @Rollback
     public void testGetById() {
 
         long billId = saveBill(bill);
@@ -130,39 +130,62 @@ public class CardDaoImplTest {
 
         expectedCard = cardDao.getById(cardId);
         Assert.assertEquals("testUpdate() method failed: ", actualCard, expectedCard);
-
-        delete(cardId,userId,billId);
     }
 
+    //TODO метод не пашет
     @Ignore
     @Test
+    @Rollback
     public void testGetAllCardsByUserId(){
+        saveBill(bill);
+        saveUser(user);
+        saveCard(actualCard);
 
-        long billId = saveBill(bill);
-        long userId = saveUser(user);
-        long cardId = saveCard(actualCard);
-
-        bill = new BillBuilder
-                .BillEntityBuilder()
-                .id(billId)
+        Card card = new CardBuilder
+                .CardEntityBuilder()
+                .password("1111111")
+                .registration(LocalDate.now())
+                .validity(LocalDate.now().plusYears(5))
+                .bill(bill)
+                .type(type)
+                .user(user)
                 .build();
 
-        user = new UserBuilder
-                .UserEntityBuilder()
-                .id(userId)
-                .build();
+        saveBill(bill);
+        long id = saveUser(user);
+        saveCard(card);
 
-        actualCard.setUser(user);
-        actualCard.setBill(bill);
+        Set<Card> cards = cardDao.getAllCardsByUserId(id);
+        Assert.assertTrue("testGetAllCardsByUserId() method failed: ",cards.size()>=2);
     }
 
-    @Ignore
     @Test
+    @Rollback
     public void testGetAll(){
+        saveBill(bill);
+        saveUser(user);
+        saveCard(actualCard);
 
+        Card card = new CardBuilder
+                .CardEntityBuilder()
+                .password("1111111")
+                .registration(LocalDate.now())
+                .validity(LocalDate.now().plusYears(5))
+                .bill(bill)
+                .type(type)
+                .user(user)
+                .build();
+
+        saveBill(bill);
+        saveUser(user);
+        saveCard(card);
+
+        List<Card> cards = cardDao.getAll();
+        Assert.assertTrue("testGetAll() method failed: ",cards.size()>=2);
     }
 
     @Test
+    @Rollback
     public void testBlockCard(){
 
         long billId = saveBill(bill);
@@ -173,11 +196,10 @@ public class CardDaoImplTest {
 
         expectedCard = cardDao.getById(cardId);
         Assert.assertFalse("testBlockCard() method failed: ", expectedCard.isStatus());
-
-        delete(cardId,userId,billId);
     }
 
     @Test
+    @Rollback
     public void testUnblockCard(){
 
         long billId = saveBill(bill);
@@ -188,8 +210,6 @@ public class CardDaoImplTest {
 
         expectedCard = cardDao.getById(cardId);
         Assert.assertTrue("testUnblockCard() method failed: ", expectedCard.isStatus());
-
-        delete(cardId,userId,billId);
     }
 
     @After
@@ -211,24 +231,6 @@ public class CardDaoImplTest {
 
     private long saveCard(Card card) {
         return cardDao.save(card);
-    }
-
-    private void deleteCard(long cardId) {
-        cardDao.delete(cardId);
-    }
-
-    private void deleteUser(long userId) {
-        userDao.delete(userId);
-    }
-
-    private void deleteBill(long billId) {
-        billDao.delete(billId);
-    }
-
-    private void delete(long cardId, long userId, long billId) {
-        deleteCard(cardId);
-        deleteUser(userId);
-        deleteBill(billId);
     }
 
 }

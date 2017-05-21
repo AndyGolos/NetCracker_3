@@ -1,17 +1,15 @@
 package com.Golosov.controllers;
 
-import com.Golosov.entities.Card;
-import com.Golosov.entities.History;
-import com.Golosov.entities.User;
+import com.Golosov.entities.Type;
 import com.Golosov.services.dto.dto.CardDto;
 import com.Golosov.services.dto.dto.HistoryDto;
+import com.Golosov.services.dto.dto.TypeDto;
 import com.Golosov.services.dto.dto.UserDto;
 import com.Golosov.services.interfaces.CardService;
 import com.Golosov.services.interfaces.HistoryService;
+import com.Golosov.services.interfaces.TypeService;
 import com.Golosov.services.interfaces.UserService;
-import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -29,13 +27,21 @@ public class ClientController {
     private CardService cardService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private TypeService typeService;
 
-
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public long sss() {
+        TypeDto typeDto = new TypeDto();
+        typeDto.setType("vip");
+        return typeService.save(typeDto);
+    }
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public UserDto userInfo(@PathVariable long id){
+    public UserDto userInfo(@PathVariable long id) {
         return userService.get(id);
     }
 
@@ -43,8 +49,6 @@ public class ClientController {
     /*@RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     public User userSave(@PathVariable long )*/
-
-
 
 
     @RequestMapping(value = "/{id}/cards", method = RequestMethod.GET)
@@ -60,10 +64,9 @@ public class ClientController {
     }
 
 
-
     @RequestMapping(value = "/card/{id}/histories", method = RequestMethod.GET)
     @ResponseBody
-    public Set<HistoryDto> cardHistories(@PathVariable long id){
+    public Set<HistoryDto> cardHistories(@PathVariable long id) {
         return historyService.findCardHistory(id);
     }
 }

@@ -30,18 +30,22 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public long save(TypeDto typeDto) {
         Type type = Converter.typeDtoToTypeEntityConverter(typeDto);
+        long id = -1;
         try {
-            return typeDao.save(type);
+            id = typeDao.save(type);
+            logger.info("Type: " + type + " successfully saved!");
         } catch (DaoException dao) {
             logger.error("Error was thrown in service: " + dao);
             throw new ServiceException();
         }
+        return id;
     }
 
     @Override
     public void delete(long id) {
         try {
             typeDao.delete(id);
+            logger.info("Type by id: " + id + " successfully deleted!");
         } catch (DaoException dao) {
             logger.error("Error was thrown in service: " + dao);
             throw new ServiceException();
@@ -53,6 +57,7 @@ public class TypeServiceImpl implements TypeService {
         Type type = Converter.typeDtoToTypeEntityConverter(typeDto);
         try {
             typeDao.update(type);
+            logger.info("Type: " + type + " successfully updated!");
         } catch (DaoException dao) {
             logger.error("Error was thrown in service: " + dao);
             throw new ServiceException();
@@ -64,6 +69,7 @@ public class TypeServiceImpl implements TypeService {
         List<TypeDto> typeDtos = new ArrayList<>();
         try {
             List<Type> types = typeDao.getAll();
+            logger.info("Types successfully found!");
             types.forEach(type -> {
                 TypeDto typeDto = Converter.typeEntityToTypeDtoConverter(type);
                 typeDtos.add(typeDto);
@@ -80,6 +86,7 @@ public class TypeServiceImpl implements TypeService {
         TypeDto typeDto;
         try {
             Type type = typeDao.getById(id);
+            logger.info("Type: " + type + " successfully found!");
             typeDto = Converter.typeEntityToTypeDtoConverter(type);
         } catch (DaoException dao) {
             logger.error("Error was thrown in service: " + dao);
