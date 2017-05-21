@@ -144,7 +144,7 @@ public class HistoryDaoImplTest {
         saveBill(bill);
         saveUser(user);
         saveCard(card);
-        long historyId = saveHistory(actualHistory);
+        saveHistory(actualHistory);
 
         History history = new HistoryBuilder
                 .HistoryEntityBuilder()

@@ -49,9 +49,11 @@ public class UserServiceImpl implements UserService {
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             Set<Role> roles = new HashSet<>();
+            //TODO
             Role role = new Role();
             role.setId(1);
             roles.add(role);
+
             user.setRoles(roles);
             return userDao.save(user);
         } catch (DaoException dao) {

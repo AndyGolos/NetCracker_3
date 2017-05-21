@@ -31,10 +31,11 @@ public class HistoryDaoImpl extends AbstractDao<History> implements HistoryDao {
             Card card = entityManager.find(Card.class, id);
             if (card != null) {
                 histories = card.getHistories();
+                logger.info("Card histories with id: " + id + " successfully found!");
             }
         } catch (HibernateException e) {
-            logger.error("Error was thrown in DAO: " + e);
-            throw new DaoException();
+            logger.error("Error was thrown in HistoryDaoImpl method getHistoriesByCardId: " + e);
+            throw new DaoException(e);
         }
         return histories;
     }
