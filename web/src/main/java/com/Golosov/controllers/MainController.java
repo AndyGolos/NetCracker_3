@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Created by Андрей on 18.05.2017.
  */
-@RestController
-@RequestMapping("/")
+/*@RestController
+@RequestMapping("/")*/
 public class MainController {
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public User login(@ModelAttribute UserDto userDto){
         return null;
@@ -21,5 +21,5 @@ public class MainController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     @ResponseBody
     public void logout(){
-    }
+    }*/
 }

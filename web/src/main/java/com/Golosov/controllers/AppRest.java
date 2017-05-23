@@ -18,10 +18,10 @@ import java.util.Set;
 /**
  * Created by Андрей on 17.05.2017.
  */
-@RestController
+/*@RestController*/
 public class AppRest {
 
-    @Autowired
+    /*@Autowired
     private UserService userService;
 
     @Autowired
@@ -37,5 +37,5 @@ public class AppRest {
     @ResponseBody
     public List<TypeDto> getType(){
         return typeService.getAll();
-    }
+    }*/
 }

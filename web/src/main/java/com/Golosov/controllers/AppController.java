@@ -19,10 +19,10 @@ import java.util.Set;
 /**
  * Created by Андрей on 16.05.2017.
  */
-@Controller
+/*@Controller*/
 public class AppController {
 
-    @Autowired
+    /*@Autowired
     private UserDao userDao;
 
     @Autowired
@@ -44,13 +44,13 @@ public class AppController {
                 .registration(LocalDate.now())
                 .build();
 
-        /*Set<Role> roles = new HashSet<>();
+        *//*Set<Role> roles = new HashSet<>();
         Role role = new Role();
         role.setId(1);
         roles.add(role);
 
 
-        actualUser.setRoles(roles);*/
+        actualUser.setRoles(roles);*//*
 
 
 //        userDao.save(actualUser);
@@ -68,7 +68,7 @@ public class AppController {
 //        typeService.save(actualType);
         System.out.println(actualType.getId());
         return "test";
-    }
+    }*/
 
 
 

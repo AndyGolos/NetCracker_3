@@ -16,7 +16,7 @@ public class Converter {
 
     public static UserDto userEntityToUserDtoConverter(User user) {
         UserDto userDto = null;
-        if(user!=null){
+        if (user != null) {
             userDto = new UserDto();
             userDto.setId(user.getId());
             userDto.setName(user.getName());
@@ -43,7 +43,7 @@ public class Converter {
 
     public static RoleDto roleEntityToRoleDtoConverter(Role role) {
         RoleDto roleDto = null;
-        if (role != null){
+        if (role != null) {
             roleDto = new RoleDto();
             roleDto.setId(role.getId());
             roleDto.setRole(role.getRole());
@@ -53,7 +53,7 @@ public class Converter {
 
     public static BillDto billEntityToBillDtoConverter(Bill bill) {
         BillDto billDto = null;
-        if(bill!=null){
+        if (bill != null) {
             billDto = new BillDto();
             billDto.setId(bill.getId());
             billDto.setMoney(bill.getMoney());
@@ -64,7 +64,7 @@ public class Converter {
 
     public static HistoryDto historyEntityToHistoryDtoConverter(History history) {
         HistoryDto historyDto = null;
-        if(history!=null){
+        if (history != null) {
             historyDto = new HistoryDto();
             historyDto.setId(history.getId());
             historyDto.setCardId(history.getCard().getId());
@@ -76,7 +76,7 @@ public class Converter {
 
     public static CardDto cardEntityToCardDtoConverter(Card card) {
         CardDto cardDto = null;
-        if(card!=null){
+        if (card != null) {
             cardDto = new CardDto();
             cardDto.setId(card.getId());
             cardDto.setBillId(card.getBill().getId());
@@ -121,7 +121,7 @@ public class Converter {
     public static History historyDtoToHistoryEntityConverter(HistoryDto historyDto) {
         History history = new History();
         history.setId(historyDto.getId());
-        history.setOperationTime(stringToCalendarConverter(historyDto.getOperationTime()));
+//        history.setOperationTime(stringToCalendarConverter(historyDto.getOperationTime()));
         history.setValueChange(historyDto.getValueChange());
         Card card = new Card();
         card.setId(historyDto.getCardId());
@@ -155,32 +155,33 @@ public class Converter {
         card.setId(cardDto.getId());
         card.setPassword(cardDto.getPassword());
         card.setStatus(cardDto.isActive());
-        card.setRegistration(stringToLocalDateConverter(cardDto.getRegistration()));
-        card.setValidity(stringToLocalDateConverter(cardDto.getValidity()));
+        /*card.setRegistration(stringToLocalDateConverter(cardDto.getRegistration()));
+        card.setValidity(stringToLocalDateConverter(cardDto.getValidity()));*/
         return card;
 
     }
 
     private static LocalDate stringToLocalDateConverter(String date) {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return LocalDate.parse(date, timeFormatter);
+        if (date != null) {
+            return LocalDate.parse(date, timeFormatter);
+        } else
+            return null;
     }
 
-    private static Calendar stringToCalendarConverter(String time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(dateFormat.parse(time));
-        } catch (ParseException parse) {
-            //TODO
-        }
-        return calendar;
-
-        /*SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = sdf.parse(time);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);*/
-    }
+    /*private static Calendar stringToCalendarConverter(String time) {
+        if (time != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            try {
+                calendar.setTime(dateFormat.parse(time));
+            } catch (ParseException parse) {
+                //TODO
+            }
+            return calendar;
+        } else
+            return null;
+    }*/
 
 
     private static String calendarToStringConverter(Calendar calendar) {

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -40,6 +41,8 @@ public class CardServiceImpl implements CardService {
     @Override
     public long save(CardDto cardDto) {
         Card card = Converter.cardDtoToCardEntityConverter(cardDto);
+        card.setRegistration(LocalDate.now());
+        card.setValidity(LocalDate.now().plusYears(5));
         try {
             cardDao.save(card);
             logger.info("Card: " + card + " successfully saved!");

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,10 +26,12 @@ import java.util.Set;
 @Transactional(rollbackFor = DaoException.class)
 public class UserServiceImpl implements UserService {
 
+    private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserDao userDao;
 
-    private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+    //TODO логирование
 
     @Override
     public UserDto findUserInfo(UserDto userDto) {
@@ -53,8 +56,8 @@ public class UserServiceImpl implements UserService {
             Role role = new Role();
             role.setId(1);
             roles.add(role);
-
             user.setRoles(roles);
+            user.setRegistration(LocalDate.now());
             return userDao.save(user);
         } catch (DaoException dao) {
             logger.error("Error was thrown in service: " + dao);

@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Андрей on 17.05.2017.
@@ -32,6 +29,7 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public long save(HistoryDto historyDto) {
         History history = Converter.historyDtoToHistoryEntityConverter(historyDto);
+        history.setOperationTime(Calendar.getInstance());
         try {
             historyDao.save(history);
             logger.info("History: " + history + " successfully saved!");

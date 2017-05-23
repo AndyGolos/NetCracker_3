@@ -17,11 +17,11 @@ import java.util.Set;
 /**
  * Created by Андрей on 18.05.2017.
  */
-@RestController
-@RequestMapping("/client")
+/*@RestController
+@RequestMapping("/client")*/
 public class ClientController {
 
-    @Autowired
+   /* @Autowired
     private UserService userService;
     @Autowired
     private CardService cardService;
@@ -46,9 +46,9 @@ public class ClientController {
     }
 
 
-    /*@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    *//*@RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public User userSave(@PathVariable long )*/
+    public User userSave(@PathVariable long )*//*
 
 
     @RequestMapping(value = "/{id}/cards", method = RequestMethod.GET)
@@ -68,5 +68,5 @@ public class ClientController {
     @ResponseBody
     public Set<HistoryDto> cardHistories(@PathVariable long id) {
         return historyService.findCardHistory(id);
-    }
+    }*/
 }

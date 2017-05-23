@@ -1,6 +1,7 @@
 package com.Golosov.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ public class Bill extends BaseEntity {
     }
 
     @Column
+    @ColumnDefault("0")
     private long money;
     public long getMoney() {
         return money;
