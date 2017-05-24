@@ -1,4 +1,4 @@
-package com.Golosov.controllers;
+package com.Golosov.controllers.usercontrollers;
 
 import com.Golosov.entities.Type;
 import com.Golosov.services.dto.dto.CardDto;
@@ -17,11 +17,11 @@ import java.util.Set;
 /**
  * Created by Андрей on 18.05.2017.
  */
-/*@RestController
-@RequestMapping("/client")*/
+@RestController
+@RequestMapping("/client")
 public class ClientController {
 
-   /* @Autowired
+    @Autowired
     private UserService userService;
     @Autowired
     private CardService cardService;
@@ -30,7 +30,7 @@ public class ClientController {
     @Autowired
     private TypeService typeService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
     @ResponseBody
     public long sss() {
         TypeDto typeDto = new TypeDto();
@@ -39,16 +39,16 @@ public class ClientController {
     }
 
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public UserDto userInfo(@PathVariable long id) {
         return userService.get(id);
     }
 
 
-    *//*@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public User userSave(@PathVariable long )*//*
+    public User userSave(@PathVariable long )
 
 
     @RequestMapping(value = "/{id}/cards", method = RequestMethod.GET)

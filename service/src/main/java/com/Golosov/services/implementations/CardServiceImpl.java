@@ -1,7 +1,9 @@
 package com.Golosov.services.implementations;
 
 import com.Golosov.builders.HistoryBuilder;
-import com.Golosov.dao.interfaces.*;
+import com.Golosov.dao.interfaces.BillDao;
+import com.Golosov.dao.interfaces.CardDao;
+import com.Golosov.dao.interfaces.HistoryDao;
 import com.Golosov.entities.Bill;
 import com.Golosov.entities.Card;
 import com.Golosov.entities.History;
@@ -32,10 +34,6 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private HistoryDao historyDao;
     @Autowired
-    private UserDao userDao;
-    @Autowired
-    private TypeDao typeDao;
-    @Autowired
     private BillDao billDao;
 
     @Override
@@ -46,9 +44,9 @@ public class CardServiceImpl implements CardService {
         try {
             cardDao.save(card);
             logger.info("Card: " + card + " successfully saved!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card save: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card save: " + e);
+            throw new ServiceException(e);
         }
         return card.getId();
     }
@@ -58,9 +56,9 @@ public class CardServiceImpl implements CardService {
         try {
             cardDao.delete(id);
             logger.info("Card by id: " + id + " successfully deleted!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card delete: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card delete: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -74,9 +72,9 @@ public class CardServiceImpl implements CardService {
                 CardDto cardDto = Converter.cardEntityToCardDtoConverter(card);
                 cardDtos.add(cardDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card findUsersCards: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card findUsersCards: " + e);
+            throw new ServiceException(e);
         }
         return cardDtos;
     }
@@ -87,9 +85,9 @@ public class CardServiceImpl implements CardService {
         try {
             cardDao.update(card);
             logger.info("Card: " + card + " successfully updated!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card update: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card update: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -99,9 +97,9 @@ public class CardServiceImpl implements CardService {
         try {
             cardDao.unblockCard(card);
             logger.info("Card: " + card + " successfully unblocked!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card unblock: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card unblock: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -115,9 +113,9 @@ public class CardServiceImpl implements CardService {
                 CardDto cardDto = Converter.cardEntityToCardDtoConverter(card);
                 cardDtos.add(cardDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card getAll: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card getAll: " + e);
+            throw new ServiceException(e);
         }
         return cardDtos;
     }
@@ -129,9 +127,9 @@ public class CardServiceImpl implements CardService {
             Card card = cardDao.getById(id);
             logger.info("Card by id: " + id + " successfully found!");
             cardDto = Converter.cardEntityToCardDtoConverter(card);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card get: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card get: " + e);
+            throw new ServiceException(e);
         }
         return cardDto;
     }
@@ -142,9 +140,9 @@ public class CardServiceImpl implements CardService {
         try {
             cardDao.blockCard(card);
             logger.info("Card: " + card + " successfully blocked!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in card service method card block: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card block: " + e);
+            throw new ServiceException(e);
         }
     }
 

@@ -36,9 +36,9 @@ public class BillServiceImpl implements BillService {
             throw new UnsupportedOperationException();
 //            billDao.update(bill);
 //            logger.info("Bill: " + bill + " successfully replenished!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in BillServiceImpl method replenish: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in BillServiceImpl method replenish: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -48,9 +48,9 @@ public class BillServiceImpl implements BillService {
         try {
             billDao.save(bill);
             logger.info("Bill: " + bill + " successfully saved!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in BillServiceImpl method save: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in BillServiceImpl method save: " + e);
+            throw new ServiceException(e);
         }
         return bill.getId();
     }
@@ -60,9 +60,9 @@ public class BillServiceImpl implements BillService {
         try {
             billDao.delete(id);
             logger.info("Bill by id: " + id + " successfully deleted!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in BillServiceImpl method delete: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in BillServiceImpl method delete: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -72,9 +72,9 @@ public class BillServiceImpl implements BillService {
         try {
             billDao.update(bill);
             logger.info("Bill: " + bill + " successfully updated!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in BillServiceImpl method update: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in BillServiceImpl method update: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -88,9 +88,9 @@ public class BillServiceImpl implements BillService {
                 BillDto billDto = Converter.billEntityToBillDtoConverter(bill);
                 billDtos.add(billDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in BillServiceImpl method getAll: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in BillServiceImpl method getAll: " + e);
+            throw new ServiceException(e);
         }
         return billDtos;
     }
@@ -102,9 +102,9 @@ public class BillServiceImpl implements BillService {
             Bill bill = billDao.getById(id);
             logger.info("Bill by id: " + id + " successfully found!");
             billDto = Converter.billEntityToBillDtoConverter(bill);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in BillServiceImpl method get: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in BillServiceImpl method get: " + e);
+            throw new ServiceException(e);
         }
         return billDto;
     }

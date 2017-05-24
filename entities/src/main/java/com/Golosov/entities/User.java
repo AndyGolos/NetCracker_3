@@ -17,6 +17,16 @@ public class User extends BaseEntity{
         super();
     }
 
+    public User(User user) {
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.lastname = user.getLastname();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.dateOfBirth = user.getdateOfBirth();
+        this.registration = user.getRegistration();
+    }
+
     @Column(nullable = false)
     private String name;
     public String getName() {
@@ -80,7 +90,7 @@ public class User extends BaseEntity{
         this.registration = registration;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
     public Set<Role> getRoles() {

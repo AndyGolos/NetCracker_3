@@ -33,9 +33,9 @@ public class HistoryServiceImpl implements HistoryService {
         try {
             historyDao.save(history);
             logger.info("History: " + history + " successfully saved!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in history service method history save: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in history service method history save: " + e);
+            throw new ServiceException(e);
         }
         return history.getId();
     }
@@ -50,9 +50,9 @@ public class HistoryServiceImpl implements HistoryService {
                 HistoryDto historyDto = Converter.historyEntityToHistoryDtoConverter(history);
                 historyDtos.add(historyDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in history service method history findCardHistory: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in history service method history findCardHistory: " + e);
+            throw new ServiceException(e);
         }
         return historyDtos;
     }
@@ -62,9 +62,9 @@ public class HistoryServiceImpl implements HistoryService {
         try {
             historyDao.delete(id);
             logger.info("History by id: " + id + " successfully deleted!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in history service method history delete: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in history service method history delete: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -74,9 +74,9 @@ public class HistoryServiceImpl implements HistoryService {
         try {
             historyDao.update(history);
             logger.info("History: " + history + " successfully updated!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in history service method history update: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in history service method history update: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -90,9 +90,9 @@ public class HistoryServiceImpl implements HistoryService {
                 HistoryDto historyDto = Converter.historyEntityToHistoryDtoConverter(history);
                 historyDtos.add(historyDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in history service method history getAll: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in history service method history getAll: " + e);
+            throw new ServiceException(e);
         }
         return historyDtos;
     }
@@ -104,9 +104,9 @@ public class HistoryServiceImpl implements HistoryService {
             History history = historyDao.getById(id);
             logger.info("History by id: " + id + " successfully found!");
             historyDto = Converter.historyEntityToHistoryDtoConverter(history);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in history service method history get: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in history service method history get: " + e);
+            throw new ServiceException(e);
         }
         return historyDto;
     }

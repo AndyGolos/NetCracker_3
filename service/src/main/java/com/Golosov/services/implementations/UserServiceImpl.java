@@ -31,18 +31,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    //TODO логирование
-
     @Override
     public UserDto findUserInfo(UserDto userDto) {
         UserDto currentUserDto;
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             User currentUser = userDao.getByEmail(user.getEmail());
+            logger.info("User by email: " + user.getEmail() + " successfully found!");
             currentUserDto = Converter.userEntityToUserDtoConverter(currentUser);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in service: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in UserServiceImpl method findUserInfo: " + e);
+            throw new ServiceException(e);
         }
         return currentUserDto;
     }
@@ -58,20 +57,23 @@ public class UserServiceImpl implements UserService {
             roles.add(role);
             user.setRoles(roles);
             user.setRegistration(LocalDate.now());
-            return userDao.save(user);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in service: " + dao);
-            throw new ServiceException();
+            userDao.save(user);
+            logger.info("User: " + user + " successfully saved!");
+        } catch (DaoException e) {
+            logger.error("Error was thrown in UserServiceImpl method save: " + e);
+            throw new ServiceException(e);
         }
+        return user.getId();
     }
 
     @Override
     public void delete(long id) {
         try {
             userDao.delete(id);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in service: " + dao);
-            throw new ServiceException();
+            logger.info("User by id: " + id + " successfully deleted!");
+        } catch (DaoException e) {
+            logger.error("Error was thrown in  UserServiceImpl method delete: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -80,9 +82,10 @@ public class UserServiceImpl implements UserService {
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             userDao.update(user);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in service: " + dao);
-            throw new ServiceException();
+            logger.info("User: " + user + " successfully updated!");
+        } catch (DaoException e) {
+            logger.error("Error was thrown in  UserServiceImpl method update: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -91,13 +94,14 @@ public class UserServiceImpl implements UserService {
         List<UserDto> userDtos = new ArrayList<>();
         try {
             List<User> users = userDao.getAll();
+            logger.info("All users successfully found!");
             users.forEach(user -> {
                 UserDto userDto = Converter.userEntityToUserDtoConverter(user);
                 userDtos.add(userDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in service: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in UserServiceImpl method getAll: " + e);
+            throw new ServiceException(e);
         }
         return userDtos;
     }
@@ -107,10 +111,11 @@ public class UserServiceImpl implements UserService {
         UserDto userDto;
         try {
             User user = userDao.getById(id);
+            logger.info("User by id: " + id + " successfully found!");
             userDto = Converter.userEntityToUserDtoConverter(user);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in service: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in UserServiceImpl method get: " + e);
+            throw new ServiceException(e);
         }
         return userDto;
     }

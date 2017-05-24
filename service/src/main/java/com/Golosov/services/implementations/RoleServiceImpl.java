@@ -33,9 +33,9 @@ public class RoleServiceImpl implements RoleService {
         try {
             roleDao.save(role);
             logger.info("Role" + role + "successfully saved!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in role service method role save: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in role service method role save: " + e);
+            throw new ServiceException(e);
         }
         return role.getId();
     }
@@ -45,9 +45,9 @@ public class RoleServiceImpl implements RoleService {
         try {
             roleDao.delete(id);
             logger.info("Role by id: " + id + " successfully deleted!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in role service method role delete: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in role service method role delete: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -57,9 +57,9 @@ public class RoleServiceImpl implements RoleService {
         try {
             roleDao.update(role);
             logger.info("Role: " + roleDto + " successfully updated!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in role service method role update: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in role service method role update: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -73,9 +73,9 @@ public class RoleServiceImpl implements RoleService {
                 RoleDto roleDto = Converter.roleEntityToRoleDtoConverter(role);
                 roleDtos.add(roleDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in role service method role getAll: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in role service method role getAll: " + e);
+            throw new ServiceException(e);
         }
         return roleDtos;
     }
@@ -87,9 +87,9 @@ public class RoleServiceImpl implements RoleService {
             Role role = roleDao.getById(id);
             logger.info("Role by id: " + id + " successfully found!");
             roleDto = Converter.roleEntityToRoleDtoConverter(role);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in role service method role get: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in role service method role get: " + e);
+            throw new ServiceException(e);
         }
         return roleDto;
     }

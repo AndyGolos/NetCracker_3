@@ -33,9 +33,9 @@ public class TypeServiceImpl implements TypeService {
         try {
             typeDao.save(type);
             logger.info("Type: " + type + " successfully saved!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in type service method type save: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in type service method type save: " + e);
+            throw new ServiceException(e);
         }
         return type.getId();
     }
@@ -45,9 +45,9 @@ public class TypeServiceImpl implements TypeService {
         try {
             typeDao.delete(id);
             logger.info("Type by id: " + id + " successfully deleted!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in type service method type delete: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in type service method type delete: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -57,9 +57,9 @@ public class TypeServiceImpl implements TypeService {
         try {
             typeDao.update(type);
             logger.info("Type: " + type + " successfully updated!");
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in type service method type update: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in type service method type update: " + e);
+            throw new ServiceException(e);
         }
     }
 
@@ -73,9 +73,9 @@ public class TypeServiceImpl implements TypeService {
                 TypeDto typeDto = Converter.typeEntityToTypeDtoConverter(type);
                 typeDtos.add(typeDto);
             });
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in type service method type getAll: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in type service method type getAll: " + e);
+            throw new ServiceException(e);
         }
         return typeDtos;
     }
@@ -87,9 +87,9 @@ public class TypeServiceImpl implements TypeService {
             Type type = typeDao.getById(id);
             logger.info("Type: " + type + " successfully found!");
             typeDto = Converter.typeEntityToTypeDtoConverter(type);
-        } catch (DaoException dao) {
-            logger.error("Error was thrown in type service method type get: " + dao);
-            throw new ServiceException();
+        } catch (DaoException e) {
+            logger.error("Error was thrown in type service method type get: " + e);
+            throw new ServiceException(e);
         }
         return typeDto;
     }

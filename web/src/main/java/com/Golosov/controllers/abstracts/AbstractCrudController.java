@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Андрей on 23.05.2017.
  */
-public abstract class AbstractCrudController<T extends BaseDto> {
+public abstract class AbstractCrudController<T extends BaseDto>{
 
     private final Logger logger = Logger.getLogger(AbstractCrudController.class);
 
