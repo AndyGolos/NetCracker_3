@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             User currentUser = userDao.getByEmail(user.getEmail());
-            logger.info("User by email: " + user.getEmail() + " successfully found!");
+            logger.debug("User by email: " + user.getEmail() + " successfully found!");
             currentUserDto = Converter.userEntityToUserDtoConverter(currentUser);
         } catch (DaoException e) {
             logger.error("Error was thrown in UserServiceImpl method findUserInfo: " + e);
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roles);
             user.setRegistration(LocalDate.now());
             userDao.save(user);
-            logger.info("User: " + user + " successfully saved!");
+            logger.debug("User: " + user + " successfully saved!");
         } catch (DaoException e) {
             logger.error("Error was thrown in UserServiceImpl method save: " + e);
             throw new ServiceException(e);
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public void delete(long id) {
         try {
             userDao.delete(id);
-            logger.info("User by id: " + id + " successfully deleted!");
+            logger.debug("User by id: " + id + " successfully deleted!");
         } catch (DaoException e) {
             logger.error("Error was thrown in  UserServiceImpl method delete: " + e);
             throw new ServiceException(e);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             userDao.update(user);
-            logger.info("User: " + user + " successfully updated!");
+            logger.debug("User: " + user + " successfully updated!");
         } catch (DaoException e) {
             logger.error("Error was thrown in  UserServiceImpl method update: " + e);
             throw new ServiceException(e);
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         List<UserDto> userDtos = new ArrayList<>();
         try {
             List<User> users = userDao.getAll();
-            logger.info("All users successfully found!");
+            logger.debug("All users successfully found!");
             users.forEach(user -> {
                 UserDto userDto = Converter.userEntityToUserDtoConverter(user);
                 userDtos.add(userDto);
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         UserDto userDto;
         try {
             User user = userDao.getById(id);
-            logger.info("User by id: " + id + " successfully found!");
+            logger.debug("User by id: " + id + " successfully found!");
             userDto = Converter.userEntityToUserDtoConverter(user);
         } catch (DaoException e) {
             logger.error("Error was thrown in UserServiceImpl method get: " + e);

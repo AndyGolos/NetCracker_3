@@ -1,5 +1,6 @@
 package com.Golosov.serviceTests;
 
+import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.BillDto;
 import com.Golosov.services.dto.dto.CardDto;
 import com.Golosov.services.dto.dto.TypeDto;
@@ -8,7 +9,10 @@ import com.Golosov.services.interfaces.BillService;
 import com.Golosov.services.interfaces.CardService;
 import com.Golosov.services.interfaces.TypeService;
 import com.Golosov.services.interfaces.UserService;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -16,6 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -44,11 +50,15 @@ public class CardServiceImplTest {
 
     @Before
     public void setUp() {
+
+        String validity = localDateToStringConverter(LocalDate.now().plusYears(5));
+        String registration = localDateToStringConverter(LocalDate.now());
+
         actualCardDto = new CardDto();
         actualCardDto.setActive(true);
         actualCardDto.setPassword("1234");
-        actualCardDto.setValidity("22.12.2015");
-        actualCardDto.setRegistration("22.12.2015");
+        actualCardDto.setValidity(validity);
+        actualCardDto.setRegistration(registration);
 
         userDto = new UserDto();
         userDto.setName("Andy");
@@ -155,10 +165,9 @@ public class CardServiceImplTest {
         Assert.assertEquals("testGetById() method failed: ", actualCardDto, expectedCardDto);
     }
 
-    //TODO поправить тест
     @Test
     @Rollback
-    public void testReplenish() {
+    public void testTransferMoney() {
         long billId = billService.save(billDto);
         long typeId = typeService.save(typeDto);
         long userId = userService.save(userDto);
@@ -169,24 +178,31 @@ public class CardServiceImplTest {
         long cardId = cardService.save(actualCardDto);
 
         BillDto billDto1 = new BillDto();
-        billDto1.setMoney(0);
         billDto1.setPassword("qqq");
         long billtransferId = billService.save(billDto1);
 
         actualCardDto.setBillId(billtransferId);
         long cardTransferId = cardService.save(actualCardDto);
 
-        boolean result = cardService.replenishCard(cardId, actualCardDto.getPassword(), cardTransferId, 300);
-        Assert.assertTrue("testReplenish() method failed: ", result);
+        boolean result = cardService.transferMoney(cardId, actualCardDto.getPassword(), cardTransferId, 300);
+        Assert.assertTrue("testTransferMoney() method failed: ", result);
 
-        BillDto bill1 = billService.get(billId);
-        BillDto bill2 = billService.get(billtransferId);
-        Assert.assertTrue("testReplenish() method failed: ", bill1.getMoney() + bill2.getMoney() == 1000);
+        BillDto fromBill  = billService.get(billId);
+        BillDto toBill = billService.get(billtransferId);
+        Assert.assertTrue("testTransferMoney() method failed: ", fromBill.getMoney() + toBill.getMoney() == 1000);
     }
 
     @After
     public void dropDown() {
         actualCardDto = null;
         expectedCardDto = null;
+    }
+
+    private String localDateToStringConverter(LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        if (localDate != null) {
+            return localDate.format(formatter);
+        } else
+            return null;
     }
 }

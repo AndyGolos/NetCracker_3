@@ -1,5 +1,6 @@
 package com.Golosov.serviceTests;
 
+import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.UserDto;
 import com.Golosov.services.interfaces.UserService;
 import org.junit.After;
@@ -13,7 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.AssertTrue;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -32,6 +34,7 @@ public class UserServiceImplTest {
 
     @Before
     public void setUp() {
+        String registration = localDateToStringConverter(LocalDate.now());
         actualUserDto = new UserDto();
         actualUserDto.setName("Andt");
         actualUserDto.setSurname("Golosov");
@@ -39,32 +42,32 @@ public class UserServiceImplTest {
         actualUserDto.setPassword("1234567890");
         actualUserDto.setEmail("AndyGolos@mail.ru");
         actualUserDto.setBirth("22.12.2016");
-        actualUserDto.setRegistration("22.12.2017");
+        actualUserDto.setRegistration(registration);
     }
 
     @Test
     @Rollback
-    public void testSave(){
+    public void testSave() {
         long id = userService.save(actualUserDto);
 
         expectedUserDto = userService.get(id);
-        Assert.assertEquals("testSave() method failed: ",actualUserDto,expectedUserDto);
+        Assert.assertEquals("testSave() method failed: ", actualUserDto, expectedUserDto);
     }
 
     @Test
     @Rollback
-    public void testDelete(){
+    public void testDelete() {
         long id = userService.save(actualUserDto);
 
         userService.delete(id);
 
         expectedUserDto = userService.get(id);
-        Assert.assertNull("testDelete() method failed: ",expectedUserDto);
+        Assert.assertNull("testDelete() method failed: ", expectedUserDto);
     }
 
     @Test
     @Rollback
-    public void testUpdate(){
+    public void testUpdate() {
         long id = userService.save(actualUserDto);
 
         actualUserDto.setId(id);
@@ -72,28 +75,28 @@ public class UserServiceImplTest {
         userService.update(actualUserDto);
 
         expectedUserDto = userService.get(id);
-        Assert.assertEquals("testUpdate() method failed: ",actualUserDto,expectedUserDto);
+        Assert.assertEquals("testUpdate() method failed: ", actualUserDto, expectedUserDto);
     }
 
     @Test
     @Rollback
-    public void testGetById(){
+    public void testGetById() {
         long id = userService.save(actualUserDto);
 
         expectedUserDto = userService.get(id);
-        Assert.assertEquals("testGetById() method failed: ",actualUserDto,expectedUserDto);
+        Assert.assertEquals("testGetById() method failed: ", actualUserDto, expectedUserDto);
     }
 
     @Test
     @Rollback
-    public void testGetAll(){
+    public void testGetAll() {
         long id = userService.save(actualUserDto);
 
         actualUserDto.setName("LOCALHOST8080");
         userService.save(actualUserDto);
 
         List<UserDto> users = userService.getAll();
-        Assert.assertTrue("testGetById() method failed: ", users.size()>=2);
+        Assert.assertTrue("testGetById() method failed: ", users.size() >= 2);
     }
 
 
@@ -103,12 +106,20 @@ public class UserServiceImplTest {
         userService.save(actualUserDto);
 
         expectedUserDto = userService.findUserInfo(actualUserDto);
-        Assert.assertEquals("testGetByEmail() method failed: ",actualUserDto,expectedUserDto);
+        Assert.assertEquals("testGetByEmail() method failed: ", actualUserDto, expectedUserDto);
     }
 
     @After
     public void dropDown() {
         actualUserDto = null;
         expectedUserDto = null;
+    }
+
+    private  String localDateToStringConverter(LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        if (localDate != null) {
+            return localDate.format(formatter);
+        } else
+            return null;
     }
 }

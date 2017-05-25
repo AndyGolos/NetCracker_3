@@ -1,6 +1,5 @@
 package com.Golosov.services.interfaces;
 
-import com.Golosov.entities.BaseEntity;
 import com.Golosov.services.dto.dto.BaseDto;
 
 import java.util.List;

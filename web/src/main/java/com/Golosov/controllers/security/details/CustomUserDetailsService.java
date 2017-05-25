@@ -1,5 +1,6 @@
 package com.Golosov.controllers.security.details;
 
+import com.Golosov.dao.interfaces.RoleDao;
 import com.Golosov.dao.interfaces.UserDao;
 import com.Golosov.entities.Role;
 import com.Golosov.entities.User;
@@ -19,6 +20,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -26,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("No user with such email: " + email);
         } else {
-            Set<Role> userRoles = user.getRoles();
+            Set<Role> userRoles = roleDao.getRolesByUserId(user.getId());
             System.out.println(userRoles);
             return new CustomUserDetails(user, userRoles);
         }

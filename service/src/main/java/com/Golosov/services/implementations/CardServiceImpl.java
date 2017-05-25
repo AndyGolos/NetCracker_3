@@ -10,6 +10,7 @@ import com.Golosov.entities.History;
 import com.Golosov.exceptions.DaoException;
 import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.CardDto;
+import com.Golosov.services.exceptions.NotFoundException;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.CardService;
 import org.apache.log4j.Logger;
@@ -43,7 +44,7 @@ public class CardServiceImpl implements CardService {
         card.setValidity(LocalDate.now().plusYears(5));
         try {
             cardDao.save(card);
-            logger.info("Card: " + card + " successfully saved!");
+            logger.debug("Card: " + card + " successfully saved!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card save: " + e);
             throw new ServiceException(e);
@@ -55,7 +56,7 @@ public class CardServiceImpl implements CardService {
     public void delete(long id) {
         try {
             cardDao.delete(id);
-            logger.info("Card by id: " + id + " successfully deleted!");
+            logger.debug("Card by id: " + id + " successfully deleted!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card delete: " + e);
             throw new ServiceException(e);
@@ -67,7 +68,7 @@ public class CardServiceImpl implements CardService {
         Set<CardDto> cardDtos = new HashSet<>();
         try {
             Set<Card> userCards = cardDao.getAllCardsByUserId(id);
-            logger.info("All user's cards with id: " + id + " successfully found!");
+            logger.debug("All user's cards with id: " + id + " successfully found!");
             userCards.forEach(card -> {
                 CardDto cardDto = Converter.cardEntityToCardDtoConverter(card);
                 cardDtos.add(cardDto);
@@ -84,7 +85,7 @@ public class CardServiceImpl implements CardService {
         Card card = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
             cardDao.update(card);
-            logger.info("Card: " + card + " successfully updated!");
+            logger.debug("Card: " + card + " successfully updated!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card update: " + e);
             throw new ServiceException(e);
@@ -96,7 +97,7 @@ public class CardServiceImpl implements CardService {
         Card card = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
             cardDao.unblockCard(card);
-            logger.info("Card: " + card + " successfully unblocked!");
+            logger.debug("Card: " + card + " successfully unblocked!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card unblock: " + e);
             throw new ServiceException(e);
@@ -108,7 +109,7 @@ public class CardServiceImpl implements CardService {
         List<CardDto> cardDtos = new ArrayList<>();
         try {
             List<Card> cards = cardDao.getAll();
-            logger.info("All cards successfully found!");
+            logger.debug("All cards successfully found!");
             cards.forEach(card -> {
                 CardDto cardDto = Converter.cardEntityToCardDtoConverter(card);
                 cardDtos.add(cardDto);
@@ -125,7 +126,7 @@ public class CardServiceImpl implements CardService {
         CardDto cardDto;
         try {
             Card card = cardDao.getById(id);
-            logger.info("Card by id: " + id + " successfully found!");
+            logger.debug("Card by id: " + id + " successfully found!");
             cardDto = Converter.cardEntityToCardDtoConverter(card);
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card get: " + e);
@@ -139,49 +140,73 @@ public class CardServiceImpl implements CardService {
         Card card = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
             cardDao.blockCard(card);
-            logger.info("Card: " + card + " successfully blocked!");
+            logger.debug("Card: " + card + " successfully blocked!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card block: " + e);
             throw new ServiceException(e);
         }
     }
 
-    //TODO поправить метод
-    //TODO логгирование
     @Override
-    public boolean replenishCard(long cardId, String cardPassword, long cardTransferId, long summ) {
-        Card card = cardDao.getById(cardId);
-        if (card.getPassword().equals(cardPassword)) {
-            Card transferCard = cardDao.getById(cardTransferId);
-            Bill bill = billDao.getById(card.getBill().getId());
-            if (bill.getMoney() - summ < 0) {
-                return false;
-            } else {
-                bill.setMoney(bill.getMoney() - summ);
-                cardDao.update(card);
-
-                History history = new HistoryBuilder
-                        .HistoryEntityBuilder()
-                        .card(card)
-                        .operationTime(Calendar.getInstance())
-                        .valueChange("-" + summ)
-                        .build();
-                historyDao.save(history);
-
-                Bill billTransferCard = billDao.getById(transferCard.getBill().getId());
-                billTransferCard.setMoney(billTransferCard.getMoney() + summ);
-                cardDao.update(transferCard);
-
-                History historytransfer = new HistoryBuilder
-                        .HistoryEntityBuilder()
-                        .card(transferCard)
-                        .operationTime(Calendar.getInstance())
-                        .valueChange("+" + summ)
-                        .build();
-                historyDao.save(historytransfer);
-                return true;
+    public boolean transferMoney(long fromCardId, String fromCardPassword, long toCardId, long amountOfMoney) {
+        try {
+            Card fromCard = cardDao.getById(fromCardId);
+            if (fromCard == null) {
+                logger.debug("Card by id: " + fromCardId + " not found!");
+                throw new NotFoundException("Bill not found!");
             }
-        } else
-            return false;
+            logger.debug("Card: " + fromCard + " successfully found!");
+
+            Bill fromBill = billDao.getById(fromCard.getBill().getId());
+            logger.debug("Bill: " + fromBill + " successfully found!");
+
+            Card toCard = cardDao.getById(toCardId);
+            if (toCard == null) {
+                logger.debug("Card by id: " + toCardId + " not found!");
+                throw new NotFoundException("Bill not found!");
+            }
+            logger.debug("Card: " + toCard + " successfully found!");
+            Bill toBill = billDao.getById(toCard.getBill().getId());
+            logger.debug("Bill: " + toBill + " successfully found!");
+
+            if (fromCard.getPassword().equals(fromCardPassword)) {
+                if (fromBill.getMoney() - amountOfMoney < 0) {
+                    logger.debug("There are not enough money on the bill!");
+                    return false;
+                } else {
+                    fromBill.setMoney(fromBill.getMoney() - amountOfMoney);
+                    billDao.update(fromBill);
+                    logger.debug("Money on the card: " + fromCard + " successfully updated!");
+                    History fromHistory = new HistoryBuilder
+                            .HistoryEntityBuilder()
+                            .card(fromCard)
+                            .operationTime(Calendar.getInstance())
+                            .valueChange("-" + amountOfMoney)
+                            .build();
+                    historyDao.save(fromHistory);
+                    logger.debug("History: " + fromHistory + " successfully saved!");
+
+                    toBill.setMoney(toBill.getMoney() + amountOfMoney);
+                    billDao.update(toBill);
+                    logger.debug("Money on the card: " + toCard + " successfully updated!");
+                    History toHistory = new HistoryBuilder
+                            .HistoryEntityBuilder()
+                            .card(toCard)
+                            .operationTime(Calendar.getInstance())
+                            .valueChange("+" + amountOfMoney)
+                            .build();
+                    historyDao.save(toHistory);
+                    logger.debug("History: " + fromHistory + " successfully saved!");
+                    logger.debug("Money transferred!");
+                    return true;
+                }
+            } else {
+                logger.debug("Card password is not equals to entered password!");
+                return false;
+            }
+        } catch (DaoException e) {
+            logger.error("Error was thrown in card service method card block: " + e);
+            throw new ServiceException(e);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.Golosov.controllers.exceptions;
+package com.Golosov.services.exceptions;
 
 /**
  * Created by Андрей on 24.05.2017.

@@ -3,7 +3,6 @@ package com.Golosov.services.dto.converters;
 import com.Golosov.entities.*;
 import com.Golosov.services.dto.dto.*;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -84,8 +83,10 @@ public class Converter {
             cardDto.setActive(card.isStatus());
             cardDto.setPassword(card.getPassword());
             cardDto.setType(card.getType().getId());
-            cardDto.setRegistration(localDateToStringConverter(card.getRegistration()));
-            cardDto.setValidity(localDateToStringConverter(card.getValidity()));
+            LocalDate registration = card.getRegistration();
+            cardDto.setRegistration(localDateToStringConverter(registration));
+            LocalDate validation = card.getValidity();
+            cardDto.setValidity(localDateToStringConverter(validation));
         }
         return cardDto;
     }
@@ -121,7 +122,6 @@ public class Converter {
     public static History historyDtoToHistoryEntityConverter(HistoryDto historyDto) {
         History history = new History();
         history.setId(historyDto.getId());
-//        history.setOperationTime(stringToCalendarConverter(historyDto.getOperationTime()));
         history.setValueChange(historyDto.getValueChange());
         Card card = new Card();
         card.setId(historyDto.getCardId());
@@ -155,10 +155,9 @@ public class Converter {
         card.setId(cardDto.getId());
         card.setPassword(cardDto.getPassword());
         card.setStatus(cardDto.isActive());
-        /*card.setRegistration(stringToLocalDateConverter(cardDto.getRegistration()));
-        card.setValidity(stringToLocalDateConverter(cardDto.getValidity()));*/
+        card.setRegistration(stringToLocalDateConverter(cardDto.getRegistration()));
+        card.setValidity(stringToLocalDateConverter(cardDto.getValidity()));
         return card;
-
     }
 
     private static LocalDate stringToLocalDateConverter(String date) {
@@ -168,21 +167,6 @@ public class Converter {
         } else
             return null;
     }
-
-    /*private static Calendar stringToCalendarConverter(String time) {
-        if (time != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-            Calendar calendar = Calendar.getInstance();
-            try {
-                calendar.setTime(dateFormat.parse(time));
-            } catch (ParseException parse) {
-                //TODO
-            }
-            return calendar;
-        } else
-            return null;
-    }*/
-
 
     private static String calendarToStringConverter(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -199,5 +183,4 @@ public class Converter {
         } else
             return null;
     }
-
 }

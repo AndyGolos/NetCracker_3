@@ -21,6 +21,7 @@ public abstract class AbstractCrudController<T extends BaseDto>{
     protected abstract BaseService<T> getService();
 
     protected ResponseEntity<Long> save(T dto) {
+
         long id = getService().save(dto);
         return new ResponseEntity<Long>(id, HttpStatus.OK);
     }

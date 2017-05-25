@@ -27,7 +27,7 @@ public class AdminController {
     @Autowired
     private CardService cardService;
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/", method = RequestMethod.GET)
     public ResponseEntity<List<UserDto>> getAllUsers(){
         List<UserDto> users = userService.getAll();
         return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
@@ -39,7 +39,7 @@ public class AdminController {
         return new ResponseEntity<Set<CardDto>>(usersCards,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/unblockCard/", method = RequestMethod.POST)
+    @RequestMapping(value = "/unblockCard", method = RequestMethod.POST)
     public ResponseEntity unblockCard(@RequestBody CardDto cardDto){
         cardService.unblockCard(cardDto);
         return new ResponseEntity(HttpStatus.OK);

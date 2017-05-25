@@ -5,6 +5,7 @@ import com.Golosov.entities.Bill;
 import com.Golosov.exceptions.DaoException;
 import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.BillDto;
+import com.Golosov.services.exceptions.NotFoundException;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.BillService;
 import org.apache.log4j.Logger;
@@ -27,15 +28,25 @@ public class BillServiceImpl implements BillService {
     @Autowired
     private BillDao billDao;
 
-    //TODO Метод доделать
     @Override
     public void replenishBill(BillDto billDto) {
-        Bill bill = Converter.billDtoToBillEntityConverter(billDto);
+        Bill replenishableBill = Converter.billDtoToBillEntityConverter(billDto);
         try {
-
-            throw new UnsupportedOperationException();
-//            billDao.update(bill);
-//            logger.info("Bill: " + bill + " successfully replenished!");
+            Bill currentBill = billDao.getById(replenishableBill.getId());
+            if (currentBill == null) {
+                logger.debug("Bill by id: " + replenishableBill.getId() + " not found!");
+                throw new NotFoundException("Bill not found!");
+            }
+            if (replenishableBill.getPassword() != null
+                    && replenishableBill.getPassword().equals(currentBill.getPassword())
+                    && replenishableBill.getMoney() > 0) {
+                currentBill.setMoney(currentBill.getMoney() + replenishableBill.getMoney());
+                billDao.update(currentBill);
+                logger.debug("Bill: " + currentBill + " successfully replenished!");
+            } else {
+                logger.debug("Inocorrect data entered!");
+                throw new IllegalArgumentException("Inocorrect data entered!");
+            }
         } catch (DaoException e) {
             logger.error("Error was thrown in BillServiceImpl method replenish: " + e);
             throw new ServiceException(e);
@@ -47,7 +58,7 @@ public class BillServiceImpl implements BillService {
         Bill bill = Converter.billDtoToBillEntityConverter(billDto);
         try {
             billDao.save(bill);
-            logger.info("Bill: " + bill + " successfully saved!");
+            logger.debug("Bill: " + bill + " successfully saved!");
         } catch (DaoException e) {
             logger.error("Error was thrown in BillServiceImpl method save: " + e);
             throw new ServiceException(e);
@@ -59,7 +70,7 @@ public class BillServiceImpl implements BillService {
     public void delete(long id) {
         try {
             billDao.delete(id);
-            logger.info("Bill by id: " + id + " successfully deleted!");
+            logger.debug("Bill by id: " + id + " successfully deleted!");
         } catch (DaoException e) {
             logger.error("Error was thrown in BillServiceImpl method delete: " + e);
             throw new ServiceException(e);
@@ -71,7 +82,7 @@ public class BillServiceImpl implements BillService {
         Bill bill = Converter.billDtoToBillEntityConverter(billDto);
         try {
             billDao.update(bill);
-            logger.info("Bill: " + bill + " successfully updated!");
+            logger.debug("Bill: " + bill + " successfully updated!");
         } catch (DaoException e) {
             logger.error("Error was thrown in BillServiceImpl method update: " + e);
             throw new ServiceException(e);
@@ -83,7 +94,7 @@ public class BillServiceImpl implements BillService {
         List<BillDto> billDtos = new ArrayList<>();
         try {
             List<Bill> bills = billDao.getAll();
-            logger.info("All bills successfully found!");
+            logger.debug("All bills successfully found!");
             bills.forEach(bill -> {
                 BillDto billDto = Converter.billEntityToBillDtoConverter(bill);
                 billDtos.add(billDto);
@@ -100,7 +111,7 @@ public class BillServiceImpl implements BillService {
         BillDto billDto;
         try {
             Bill bill = billDao.getById(id);
-            logger.info("Bill by id: " + id + " successfully found!");
+            logger.debug("Bill by id: " + id + " successfully found!");
             billDto = Converter.billEntityToBillDtoConverter(bill);
         } catch (DaoException e) {
             logger.error("Error was thrown in BillServiceImpl method get: " + e);

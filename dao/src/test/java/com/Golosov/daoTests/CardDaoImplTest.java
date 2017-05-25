@@ -132,13 +132,13 @@ public class CardDaoImplTest {
         Assert.assertEquals("testUpdate() method failed: ", actualCard, expectedCard);
     }
 
-    //TODO метод не пашет
+    //TODO метод работает. Тест не работает
     @Ignore
     @Test
     @Rollback
     public void testGetAllCardsByUserId(){
         saveBill(bill);
-        saveUser(user);
+        long id = saveUser(user);
         saveCard(actualCard);
 
         Card card = new CardBuilder
@@ -152,7 +152,7 @@ public class CardDaoImplTest {
                 .build();
 
         saveBill(bill);
-        long id = saveUser(user);
+        saveUser(user);
         saveCard(card);
 
         Set<Card> cards = cardDao.getAllCardsByUserId(id);

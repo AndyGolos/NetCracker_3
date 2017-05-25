@@ -24,7 +24,7 @@ public class BillDaoImpl extends AbstractDao<Bill> implements BillDao {
         try {
             bill.setMoney(bill.getMoney() + money);
             entityManager.merge(bill);
-            logger.info("Money: "+ money + " on bill: " + bill + " successfully seted!");
+            logger.debug("Money: "+ money + " on bill: " + bill + " successfully seted!");
         } catch (HibernateException e) {
             logger.error("Error was thrown in billDaoImpl method setMoney: " + e);
             throw new DaoException(e);

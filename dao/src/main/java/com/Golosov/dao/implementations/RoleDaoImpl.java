@@ -31,7 +31,10 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
             User user = entityManager.find(User.class, id);
             if (user != null) {
                 roles = user.getRoles();
-                logger.info("User roles with id: " + id + " successfully found!");
+                logger.debug("User roles with id: " + id + " successfully found!");
+            } else {
+                logger.debug("Inocorrect data entered!");
+                throw new IllegalArgumentException("Inocorrect data entered!");
             }
         } catch (HibernateException e) {
             logger.error("Error was thrown in RoleDaoImpl method getRolesByUserId: " + e);

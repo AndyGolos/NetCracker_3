@@ -25,14 +25,16 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
     }
 
 
-    //TODO если нужно кидать NULL если ничего не нашёл!!!!
     public Set<Card> getAllCardsByUserId(long id) {
         Set<Card> cards = null;
         try {
             User user = entityManager.find(User.class, id);
             if (user != null) {
                 cards = user.getCards();
-                logger.info("User cards with id: " + id + " successfully found!");
+                logger.debug("User cards with id: " + id + " successfully found!");
+            } else {
+                logger.debug("Inocorrect data entered!");
+                throw new IllegalArgumentException("Inocorrect data entered!");
             }
         } catch (HibernateException e) {
             logger.error("Error was thrown in CardDaoImpl method getAllCardsByUserId: " + e);
@@ -45,7 +47,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
         try {
             card.setStatus(false);
             entityManager.merge(card);
-            logger.info("Card: " + card + " successfully blocked!");
+            logger.debug("Card: " + card + " successfully blocked!");
         } catch (HibernateException e) {
             logger.error("Error was thrown in CardDaoImpl method blockCard: " + e);
             throw new DaoException(e);
@@ -57,7 +59,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
         try {
             card.setStatus(true);
             entityManager.merge(card);
-            logger.info("Card: " + card + " successfully unblocked!");
+            logger.debug("Card: " + card + " successfully unblocked!");
         } catch (HibernateException e) {
             logger.error("Error was thrown in CardDaoImpl method unblockCard: " + e);
             throw new DaoException(e);

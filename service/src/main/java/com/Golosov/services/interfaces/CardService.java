@@ -17,6 +17,5 @@ public interface CardService extends BaseService<CardDto> {
 
     void blockCard(CardDto cardDto);
 
-    //TODO посмотреть метод
-    boolean replenishCard(long cardId, String cardPassword, long cardTransferId, long summ);
+    boolean transferMoney(long cardId, String cardPassword, long cardTransferId, long summ);
 }

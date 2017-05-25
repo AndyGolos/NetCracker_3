@@ -30,7 +30,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
                     .setParameter("email", email)
                     .getResultList()
                     .get(0);
-            logger.info("User: " + user + " successfully found!");
+            logger.debug("User: " + user + " successfully found!");
         } catch (HibernateException e) {
             logger.error("Error was thrown in UserDaoImpl method getByEmail: " + e);
             throw new DaoException(e);

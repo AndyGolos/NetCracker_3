@@ -50,15 +50,12 @@ public class HistoryDto extends BaseDto{
         HistoryDto that = (HistoryDto) o;
 
         if (cardId != that.cardId) return false;
-        if (operationTime != null ? !operationTime.equals(that.operationTime) : that.operationTime != null)
-            return false;
         return valueChange != null ? valueChange.equals(that.valueChange) : that.valueChange == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (cardId ^ (cardId >>> 32));
-        result = 31 * result + (operationTime != null ? operationTime.hashCode() : 0);
         result = 31 * result + (valueChange != null ? valueChange.hashCode() : 0);
         return result;
     }

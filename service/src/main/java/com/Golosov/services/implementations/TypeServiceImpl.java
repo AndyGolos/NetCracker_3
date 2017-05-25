@@ -32,7 +32,7 @@ public class TypeServiceImpl implements TypeService {
         Type type = Converter.typeDtoToTypeEntityConverter(typeDto);
         try {
             typeDao.save(type);
-            logger.info("Type: " + type + " successfully saved!");
+            logger.debug("Type: " + type + " successfully saved!");
         } catch (DaoException e) {
             logger.error("Error was thrown in type service method type save: " + e);
             throw new ServiceException(e);
@@ -44,7 +44,7 @@ public class TypeServiceImpl implements TypeService {
     public void delete(long id) {
         try {
             typeDao.delete(id);
-            logger.info("Type by id: " + id + " successfully deleted!");
+            logger.debug("Type by id: " + id + " successfully deleted!");
         } catch (DaoException e) {
             logger.error("Error was thrown in type service method type delete: " + e);
             throw new ServiceException(e);
@@ -56,7 +56,7 @@ public class TypeServiceImpl implements TypeService {
         Type type = Converter.typeDtoToTypeEntityConverter(typeDto);
         try {
             typeDao.update(type);
-            logger.info("Type: " + type + " successfully updated!");
+            logger.debug("Type: " + type + " successfully updated!");
         } catch (DaoException e) {
             logger.error("Error was thrown in type service method type update: " + e);
             throw new ServiceException(e);
@@ -68,7 +68,7 @@ public class TypeServiceImpl implements TypeService {
         List<TypeDto> typeDtos = new ArrayList<>();
         try {
             List<Type> types = typeDao.getAll();
-            logger.info("All types successfully found!");
+            logger.debug("All types successfully found!");
             types.forEach(type -> {
                 TypeDto typeDto = Converter.typeEntityToTypeDtoConverter(type);
                 typeDtos.add(typeDto);
@@ -85,7 +85,7 @@ public class TypeServiceImpl implements TypeService {
         TypeDto typeDto;
         try {
             Type type = typeDao.getById(id);
-            logger.info("Type: " + type + " successfully found!");
+            logger.debug("Type: " + type + " successfully found!");
             typeDto = Converter.typeEntityToTypeDtoConverter(type);
         } catch (DaoException e) {
             logger.error("Error was thrown in type service method type get: " + e);

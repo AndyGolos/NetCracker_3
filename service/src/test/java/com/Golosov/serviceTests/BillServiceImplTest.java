@@ -76,7 +76,6 @@ public class BillServiceImplTest {
 
         List<BillDto> bills = billService.getAll();
         Assert.assertTrue("testGetAll() method failed: ",bills.size()>=2);
-
     }
 
     @Test

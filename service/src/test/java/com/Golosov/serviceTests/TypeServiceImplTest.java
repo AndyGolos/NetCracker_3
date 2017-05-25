@@ -65,9 +65,7 @@ public class TypeServiceImplTest {
     public void testUpdate(){
         long id = typeService.save(actualTypeDto);
 
-        //TODO понять почему тут именно так! Без id не работает!
         actualTypeDto.setId(id);
-
         actualTypeDto.setType("UnbeliveableSuperCard");
         typeService.update(actualTypeDto);
 

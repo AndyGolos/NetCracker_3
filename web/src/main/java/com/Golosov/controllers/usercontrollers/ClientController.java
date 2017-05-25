@@ -10,8 +10,11 @@ import com.Golosov.services.interfaces.HistoryService;
 import com.Golosov.services.interfaces.TypeService;
 import com.Golosov.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,12 +33,18 @@ public class ClientController {
     @Autowired
     private TypeService typeService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/save", method = RequestMethod.GET)
     @ResponseBody
     public long sss() {
         TypeDto typeDto = new TypeDto();
         typeDto.setType("vip");
         return typeService.save(typeDto);
+    }*/
+
+    @RequestMapping(value = "/cards/all/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<Set<CardDto>> getUserCards(@PathVariable long userId){
+        Set<CardDto> userCards = cardService.findUsersCards(userId);
+        return new ResponseEntity<Set<CardDto>>(userCards, HttpStatus.OK);
     }
 
 
