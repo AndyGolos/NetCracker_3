@@ -18,6 +18,7 @@ public class User extends BaseEntity{
     }
 
     public User(User user) {
+        super(user.getId());
         this.name = user.getName();
         this.surname = user.getSurname();
         this.lastname = user.getLastname();
@@ -25,6 +26,7 @@ public class User extends BaseEntity{
         this.password = user.getPassword();
         this.dateOfBirth = user.getdateOfBirth();
         this.registration = user.getRegistration();
+        this.roles = user.getRoles();
     }
 
     @Column(nullable = false)
@@ -90,7 +92,7 @@ public class User extends BaseEntity{
         this.registration = registration;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
     public Set<Role> getRoles() {

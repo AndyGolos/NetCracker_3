@@ -17,31 +17,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  /*  @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests()
-//                .antMatchers("*//*").permitAll()
-                .antMatchers("/admin*//*").hasRole("ADMIN")
-                .antMatchers("/client*//*").hasRole("USER")
-                .and()
-                .formLogin()
-                .and()
-                .logout()
-//                .logoutUrl("/logout")
-                .permitAll();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-        auth.inMemoryAuthentication()
-                .withUser("philip").password("password").roles("USER")
-                .and()
-                .withUser("andy").password("password").roles("ADMIN");
-
-    }*/
-
-
-
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -51,27 +26,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/register").permitAll()
+                .antMatchers("/").hasAnyRole("Администратор", "Клиент")
+                //TODO разобраться
                 .antMatchers("/admin/*").hasRole("Администратор")
-                .antMatchers("/client/*").access("hasRole('Клиент')")
+                .antMatchers("/admin/**").hasRole("Администратор")
+                .antMatchers("/client/*").hasRole("Клиент")
+                .antMatchers("/client/**").hasRole("Клиент")
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-//                .loginPage("/login")
-//                .usernameParameter("username")
-//                .passwordParameter("password")
-                /*.usernameParameter("email")
-                .passwordParameter("password")*/
+                .usernameParameter("email")
                 .and()
                 .logout()
-//                .logoutSuccessUrl("/logout")
-                /*.and()
-                .exceptionHandling().accessDeniedPage("/403")*/
                 .and()
-                .csrf().disable();
+                .csrf()
+                .disable();
     }
 
     /*@Bean(name="passwordEncoder")

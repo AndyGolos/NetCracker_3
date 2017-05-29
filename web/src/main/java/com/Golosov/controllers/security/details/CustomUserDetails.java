@@ -4,10 +4,13 @@ import com.Golosov.entities.Role;
 import com.Golosov.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,22 +18,38 @@ import java.util.Set;
  */
 public class CustomUserDetails extends User implements UserDetails {
 
-    private Set<Role> userRoles;
+    private final String ROLE_PREFIX = "ROLE_";
 
-    public CustomUserDetails(User user, Set<Role> userRoles) {
+    /*private Set<Role> userRoles;*/
+
+    public CustomUserDetails(User user/*, Set<Role> userRoles*/) {
         super(user);
-        this.userRoles = userRoles;
+        /*this.userRoles = userRoles;*/
     }
 
-    @Override
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String roles = StringUtils.collectionToCommaDelimitedString(userRoles);
         return AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
+    }*/
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> list = new ArrayList<>();
+        super.getRoles().forEach(role -> {
+            list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getRole()));
+        });
+        return list;
     }
 
     @Override
     public String getUsername() {
         return super.getEmail();
+    }
+
+    @Override
+    public String getPassword() {
+        return super.getPassword();
     }
 
     @Override

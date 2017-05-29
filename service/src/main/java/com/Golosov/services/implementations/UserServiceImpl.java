@@ -4,7 +4,7 @@ import com.Golosov.dao.interfaces.UserDao;
 import com.Golosov.entities.Role;
 import com.Golosov.entities.User;
 import com.Golosov.exceptions.DaoException;
-import com.Golosov.services.dto.converters.Converter;
+import com.Golosov.services.dto.Converter;
 import com.Golosov.services.dto.dto.UserDto;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.UserService;
@@ -51,10 +51,7 @@ public class UserServiceImpl implements UserService {
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             Set<Role> roles = new HashSet<>();
-            //TODO
-            Role role = new Role();
-            role.setId(1);
-            roles.add(role);
+            roles.add(new Role(1));
             user.setRoles(roles);
             user.setRegistration(LocalDate.now());
             userDao.save(user);

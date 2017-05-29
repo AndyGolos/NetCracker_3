@@ -14,6 +14,13 @@ import java.util.Set;
 @Entity
 public class Role extends BaseEntity {
 
+    public Role() {
+    }
+
+    public Role(long id) {
+        super(id);
+    }
+
     @Column
     private String role;
     public String getRole() {
@@ -22,7 +29,6 @@ public class Role extends BaseEntity {
     public void setRole(String role) {
         this.role = role;
     }
-
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();

@@ -3,8 +3,9 @@ package com.Golosov.services.implementations;
 import com.Golosov.dao.interfaces.BillDao;
 import com.Golosov.entities.Bill;
 import com.Golosov.exceptions.DaoException;
-import com.Golosov.services.dto.converters.Converter;
+import com.Golosov.services.dto.Converter;
 import com.Golosov.services.dto.dto.BillDto;
+import com.Golosov.services.exceptions.IncorrectPasswordException;
 import com.Golosov.services.exceptions.NotFoundException;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.BillService;
@@ -45,7 +46,7 @@ public class BillServiceImpl implements BillService {
                 logger.debug("Bill: " + currentBill + " successfully replenished!");
             } else {
                 logger.debug("Inocorrect data entered!");
-                throw new IllegalArgumentException("Inocorrect data entered!");
+                throw new IncorrectPasswordException("Incorrect password entered!");
             }
         } catch (DaoException e) {
             logger.error("Error was thrown in BillServiceImpl method replenish: " + e);

@@ -1,14 +1,10 @@
 package com.Golosov.controllers.usercontrollers;
 
-import com.Golosov.entities.Type;
+import com.Golosov.services.dto.dto.BillDto;
 import com.Golosov.services.dto.dto.CardDto;
 import com.Golosov.services.dto.dto.HistoryDto;
-import com.Golosov.services.dto.dto.TypeDto;
 import com.Golosov.services.dto.dto.UserDto;
-import com.Golosov.services.interfaces.CardService;
-import com.Golosov.services.interfaces.HistoryService;
-import com.Golosov.services.interfaces.TypeService;
-import com.Golosov.services.interfaces.UserService;
+import com.Golosov.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,53 +25,57 @@ public class ClientController {
     @Autowired
     private CardService cardService;
     @Autowired
-    private HistoryService historyService;
+    private BillService billService;
     @Autowired
-    private TypeService typeService;
+    private HistoryService historyService;
 
-    /*@RequestMapping(value = "/save", method = RequestMethod.GET)
-    @ResponseBody
-    public long sss() {
-        TypeDto typeDto = new TypeDto();
-        typeDto.setType("vip");
-        return typeService.save(typeDto);
-    }*/
 
-    @RequestMapping(value = "/cards/all/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<Set<CardDto>> getUserCards(@PathVariable long userId){
-        Set<CardDto> userCards = cardService.findUsersCards(userId);
-        return new ResponseEntity<Set<CardDto>>(userCards, HttpStatus.OK);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<UserDto> getUser(@PathVariable long id) {
+        UserDto user = userService.get(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
-    /*@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public UserDto userInfo(@PathVariable long id) {
-        return userService.get(id);
+    //TODO одинаковые методы в admin и client
+    @RequestMapping(value = "/cards/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<Set<CardDto>> getUsersCards(@PathVariable long userId) {
+        Set<CardDto> usersCards = cardService.findUsersCards(userId);
+        return new ResponseEntity<>(usersCards, HttpStatus.OK);
     }
 
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    @ResponseBody
-    public User userSave(@PathVariable long )
-
-
-    @RequestMapping(value = "/{id}/cards", method = RequestMethod.GET)
-    @ResponseBody
-    public Set<CardDto> userCards(@PathVariable long id) {
-        return cardService.findUsersCards(id);
+    @RequestMapping(value = "/blockCard/", method = RequestMethod.POST)
+    public ResponseEntity blockCard(@RequestBody CardDto cardDto) {
+        cardService.blockCard(cardDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}/cards/{cardid}", method = RequestMethod.GET)
-    @ResponseBody
-    public CardDto userCard(@PathVariable long cardid) {
-        return cardService.get(cardid);
+    @RequestMapping(value = "/replenishBill/", method = RequestMethod.POST)
+    public ResponseEntity replenishBill(@RequestBody BillDto billDto) {
+        billService.replenishBill(billDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/transferMoney/", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> transferMoney(
+            @RequestParam("fromCardId") long fromCardId,
+            @RequestParam("fromCardPassword") String fromCardPassword,
+            @RequestParam("toCardId") long toCardId,
+            @RequestParam("amountOfMoney") long amountOfMoney
+    ) {
+        boolean transfered = cardService.transferMoney(fromCardId, fromCardPassword, toCardId, amountOfMoney);
+        return new ResponseEntity<>(transfered, HttpStatus.OK);
+    }
 
-    @RequestMapping(value = "/card/{id}/histories", method = RequestMethod.GET)
-    @ResponseBody
-    public Set<HistoryDto> cardHistories(@PathVariable long id) {
-        return historyService.findCardHistory(id);
-    }*/
+    //TODO метод еще не протещен
+    @RequestMapping(value = "/createCard/", method = RequestMethod.POST)
+    public ResponseEntity<Long> createCard(@RequestBody CardDto cardDto){
+        long cardId = cardService.save(cardDto);
+        return new ResponseEntity<>(cardId,HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/histories/{cardId}", method = RequestMethod.GET)
+    public ResponseEntity<Set<HistoryDto>> getHistoriesOfCard(@PathVariable long cardId){
+        Set<HistoryDto> histories = historyService.findCardHistory(cardId);
+        return new ResponseEntity<>(histories,HttpStatus.OK);
+    }
 }

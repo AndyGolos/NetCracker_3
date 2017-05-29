@@ -3,7 +3,7 @@ package com.Golosov.services.implementations;
 import com.Golosov.dao.interfaces.HistoryDao;
 import com.Golosov.entities.History;
 import com.Golosov.exceptions.DaoException;
-import com.Golosov.services.dto.converters.Converter;
+import com.Golosov.services.dto.Converter;
 import com.Golosov.services.dto.dto.HistoryDto;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.HistoryService;

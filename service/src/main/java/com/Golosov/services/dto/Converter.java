@@ -1,4 +1,4 @@
-package com.Golosov.services.dto.converters;
+package com.Golosov.services.dto;
 
 import com.Golosov.entities.*;
 import com.Golosov.services.dto.dto.*;

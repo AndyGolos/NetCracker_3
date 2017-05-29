@@ -13,6 +13,10 @@ public class BaseEntity implements Serializable {
     public BaseEntity() {
     }
 
+    public BaseEntity(long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)

@@ -1,6 +1,5 @@
 package com.Golosov.serviceTests;
 
-import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.UserDto;
 import com.Golosov.services.interfaces.UserService;
 import org.junit.After;
@@ -115,7 +114,7 @@ public class UserServiceImplTest {
         expectedUserDto = null;
     }
 
-    private  String localDateToStringConverter(LocalDate localDate) {
+    private String localDateToStringConverter(LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         if (localDate != null) {
             return localDate.format(formatter);

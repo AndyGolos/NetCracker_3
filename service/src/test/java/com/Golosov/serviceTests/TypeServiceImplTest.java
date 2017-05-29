@@ -1,11 +1,7 @@
 package com.Golosov.serviceTests;
 
-import com.Golosov.builders.TypeBuilder;
-import com.Golosov.entities.Type;
-import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.TypeDto;
 import com.Golosov.services.interfaces.TypeService;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**

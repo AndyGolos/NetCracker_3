@@ -3,7 +3,7 @@ package com.Golosov.services.implementations;
 import com.Golosov.dao.interfaces.RoleDao;
 import com.Golosov.entities.Role;
 import com.Golosov.exceptions.DaoException;
-import com.Golosov.services.dto.converters.Converter;
+import com.Golosov.services.dto.Converter;
 import com.Golosov.services.dto.dto.RoleDto;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.RoleService;

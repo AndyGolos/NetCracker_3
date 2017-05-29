@@ -20,18 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private RoleDao roleDao;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println(email);
         User user = userDao.getByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("No user with such email: " + email);
         } else {
-            Set<Role> userRoles = roleDao.getRolesByUserId(user.getId());
-            System.out.println(userRoles);
-            return new CustomUserDetails(user, userRoles);
+            return new CustomUserDetails(user);
         }
     }
 }

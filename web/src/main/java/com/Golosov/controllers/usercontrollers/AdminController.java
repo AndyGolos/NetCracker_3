@@ -30,16 +30,17 @@ public class AdminController {
     @RequestMapping(value = "/users/", method = RequestMethod.GET)
     public ResponseEntity<List<UserDto>> getAllUsers(){
         List<UserDto> users = userService.getAll();
-        return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    //TODO одинаковые методы в admin и client
     @RequestMapping(value = "/cards/{userId}", method = RequestMethod.GET)
     public ResponseEntity<Set<CardDto>> getUsersCards(@PathVariable long userId){
         Set<CardDto> usersCards = cardService.findUsersCards(userId);
-        return new ResponseEntity<Set<CardDto>>(usersCards,HttpStatus.OK);
+        return new ResponseEntity<>(usersCards,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/unblockCard", method = RequestMethod.POST)
+    @RequestMapping(value = "/unblockCard/", method = RequestMethod.POST)
     public ResponseEntity unblockCard(@RequestBody CardDto cardDto){
         cardService.unblockCard(cardDto);
         return new ResponseEntity(HttpStatus.OK);

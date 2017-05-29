@@ -1,6 +1,5 @@
 package com.Golosov.serviceTests;
 
-import com.Golosov.services.dto.converters.Converter;
 import com.Golosov.services.dto.dto.BillDto;
 import com.Golosov.services.dto.dto.CardDto;
 import com.Golosov.services.dto.dto.TypeDto;

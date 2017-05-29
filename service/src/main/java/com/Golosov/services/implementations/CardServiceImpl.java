@@ -8,8 +8,9 @@ import com.Golosov.entities.Bill;
 import com.Golosov.entities.Card;
 import com.Golosov.entities.History;
 import com.Golosov.exceptions.DaoException;
-import com.Golosov.services.dto.converters.Converter;
+import com.Golosov.services.dto.Converter;
 import com.Golosov.services.dto.dto.CardDto;
+import com.Golosov.services.exceptions.IncorrectPasswordException;
 import com.Golosov.services.exceptions.NotFoundException;
 import com.Golosov.services.exceptions.ServiceException;
 import com.Golosov.services.interfaces.CardService;
@@ -53,6 +54,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    //TODO проверка на пароль нужна
     public void delete(long id) {
         try {
             cardDao.delete(id);
@@ -172,11 +174,12 @@ public class CardServiceImpl implements CardService {
             if (fromCard.getPassword().equals(fromCardPassword)) {
                 if (fromBill.getMoney() - amountOfMoney < 0) {
                     logger.debug("There are not enough money on the bill!");
-                    return false;
+                    throw new IncorrectPasswordException("Incorrect password entered!");
                 } else {
                     fromBill.setMoney(fromBill.getMoney() - amountOfMoney);
                     billDao.update(fromBill);
                     logger.debug("Money on the card: " + fromCard + " successfully updated!");
+                    //TODO можно заменить на конструктор
                     History fromHistory = new HistoryBuilder
                             .HistoryEntityBuilder()
                             .card(fromCard)
@@ -189,6 +192,7 @@ public class CardServiceImpl implements CardService {
                     toBill.setMoney(toBill.getMoney() + amountOfMoney);
                     billDao.update(toBill);
                     logger.debug("Money on the card: " + toCard + " successfully updated!");
+                    //TODO можно заменить на конструктор
                     History toHistory = new HistoryBuilder
                             .HistoryEntityBuilder()
                             .card(toCard)
