@@ -3,8 +3,7 @@
 
     <artifactId>web</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
-
+    <packaging>jar</packaging>
 
     <parent>
         <artifactId>PaymentSystem</artifactId>
@@ -12,53 +11,51 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-
-    <name>web Maven Webapp</name>
-    <url>http://maven.apache.org</url>
-
-
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
-        </dependency>
-
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>by.training.nc</groupId>
-            <artifactId>entities</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>by.training.nc</groupId>
             <artifactId>dao</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>by.training.nc</groupId>
             <artifactId>service</artifactId>
             <version>${project.version}</version>
         </dependency>
-
     </dependencies>
 
-
     <build>
-        <finalName>web</finalName>
+        <finalName>PaymentSystem</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.3.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
+    <name>web Maven Webapp</name>
+    <url>http://maven.apache.org</url>
     <modelVersion>4.0.0</modelVersion>
 </project>

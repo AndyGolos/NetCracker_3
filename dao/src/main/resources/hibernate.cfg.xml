@@ -13,11 +13,11 @@
     <property name="connection.pool_size">1</property>
     <property name="hbm2ddl.auto">update</property>-->
 
-    <mapping class="com.Golosov.entities.Card"/>
-    <mapping class="com.Golosov.entities.History"/>
-    <mapping class="com.Golosov.entities.Role"/>
-    <mapping class="com.Golosov.entities.Type"/>
-    <mapping class="com.Golosov.entities.User"/>
-    <mapping class="com.Golosov.entities.Bill"/>
+    <mapping class="com.golosov.entities.Card"/>
+    <mapping class="com.golosov.entities.History"/>
+    <mapping class="com.golosov.entities.Role"/>
+    <mapping class="com.golosov.entities.Type"/>
+    <mapping class="com.golosov.entities.User"/>
+    <mapping class="com.golosov.entities.Bill"/>
   </session-factory>
 </hibernate-configuration>
