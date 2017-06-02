@@ -12,6 +12,7 @@ import com.golosov.services.dto.Converter;
 import com.golosov.services.dto.dto.CardDto;
 import com.golosov.services.dto.dto.TransferDto;
 import com.golosov.services.exceptions.IncorrectPasswordException;
+import com.golosov.services.exceptions.NotEnoughMoneyException;
 import com.golosov.services.exceptions.NotFoundException;
 import com.golosov.services.exceptions.ServiceException;
 import com.golosov.services.interfaces.CardService;
@@ -59,7 +60,7 @@ public class CardServiceImpl implements CardService {
     public void delete(long id) {
         try {
             Card card = cardDao.getById(id);
-            if(card == null){
+            if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
             cardDao.delete(id);
@@ -92,7 +93,7 @@ public class CardServiceImpl implements CardService {
         Card currentCard = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
             Card card = cardDao.getById(currentCard.getId());
-            if(card == null){
+            if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
             cardDao.update(currentCard);
@@ -108,7 +109,7 @@ public class CardServiceImpl implements CardService {
         Card currentCard = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
             Card card = cardDao.getById(currentCard.getId());
-            if(card == null){
+            if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
             cardDao.unblockCard(currentCard);
@@ -141,7 +142,7 @@ public class CardServiceImpl implements CardService {
         CardDto cardDto;
         try {
             Card card = cardDao.getById(id);
-            if(card == null){
+            if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
             logger.debug("Card by id: " + id + " successfully found!");
@@ -158,7 +159,7 @@ public class CardServiceImpl implements CardService {
         Card currentCard = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
             Card card = cardDao.getById(cardDto.getId());
-            if(card == null){
+            if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
             cardDao.blockCard(currentCard);
@@ -190,8 +191,8 @@ public class CardServiceImpl implements CardService {
             logger.debug("Bill: " + toBill + " successfully found!");
 
             if (fromCard.getPassword().equals(transferDto.getFromCardPassword())) {
-                if (fromBill.getMoney() - transferDto.getAmountOfMoney() < 0) {
-                    throw new IncorrectPasswordException("Incorrect password entered!");
+                if (fromBill.getMoney() - transferDto.getAmountOfMoney() <= 0) {
+                    throw new NotEnoughMoneyException("Not enough money on card!");
                 } else {
                     fromBill.setMoney(fromBill.getMoney() - transferDto.getAmountOfMoney());
                     billDao.update(fromBill);
@@ -220,8 +221,7 @@ public class CardServiceImpl implements CardService {
                     return true;
                 }
             } else {
-                logger.debug("Card password is not equals to entered password!");
-                return false;
+                throw new IncorrectPasswordException("Incorrect password entered!");
             }
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card block: " + e);

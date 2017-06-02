@@ -35,40 +35,41 @@ public class ClientController {
     private HistoryService historyService;
 
 
-    /*@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser(@PathVariable long id) {
         UserDto user = userService.get(id);
         logger.debug("User successfully found!");
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }*/
+    }
 
     //работает
-    @RequestMapping(method = RequestMethod.GET)
+    /*@RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails authorizedUser = (CustomUserDetails) authentication.getPrincipal();
         UserDto user = userService.get(authorizedUser.getId());
         logger.debug("User info successfully found!");
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }
+    }*/
 
     //Работает
     @RequestMapping(value = "/blockCard/", method = RequestMethod.POST)
-    public ResponseEntity blockCard(@RequestBody CardDto cardDto) {
+    public ResponseEntity<CardDto> blockCard(@RequestBody CardDto cardDto) {
         cardService.blockCard(cardDto);
         logger.debug("Card successfully blocked!");
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new CardDto(cardDto.getId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
     //Работает
     @RequestMapping(value = "/replenishBill/", method = RequestMethod.POST)
-    public ResponseEntity replenishBill(@RequestBody BillDto billDto) {
+    public ResponseEntity<BillDto> replenishBill(@RequestBody BillDto billDto) {
         billService.replenishBill(billDto);
         logger.debug("Bill successfully replenished!");
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new BillDto(billDto.getId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
-    //Не работает в постмане. Жалуется на Required long parameter 'fromCardId' is not present
+    //Работает
+    //TODO добавить response entity?
     @RequestMapping(value = "/transferMoney/", method = RequestMethod.POST)
     public ResponseEntity transferMoney(@RequestBody TransferDto transferDto) {
         cardService.transferMoney(transferDto);
@@ -77,6 +78,7 @@ public class ClientController {
     }
 
     //Работает
+    //TODO в методе валидацию сделать на bill user type
     @RequestMapping(value = "/createCard/", method = RequestMethod.POST)
     public ResponseEntity<CardDto> createCard(@RequestBody CardDto cardDto) {
         long cardId = cardService.save(cardDto);

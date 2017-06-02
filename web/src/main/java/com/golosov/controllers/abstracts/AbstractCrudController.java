@@ -3,6 +3,7 @@ package com.golosov.controllers.abstracts;
 import com.golosov.services.dto.dto.BaseDto;
 import com.golosov.services.interfaces.BaseService;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,23 +26,23 @@ public abstract class AbstractCrudController<T extends BaseDto> {
     protected ResponseEntity<T> save(T dto) {
         long id = getService().save(dto);
         logger.debug("Successfully saved!");
-        T responseDto = createResponseEntity(id, HttpStatus.CREATED.toString());
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        T responseEntity = createResponseEntity(id, HttpStatus.CREATED.toString());
+        return new ResponseEntity<>(responseEntity, HttpStatus.CREATED);
     }
 
     protected ResponseEntity<T> update(T dto) {
         getService().update(dto);
         logger.debug("Successfully updated!");
-        T responseDto = createResponseEntity(dto.getId(), HttpStatus.OK.toString());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        T responseEntity = createResponseEntity(dto.getId(), HttpStatus.OK.toString());
+        return new ResponseEntity<>(responseEntity, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     protected ResponseEntity<T> delete(@PathVariable long id) {
         getService().delete(id);
         logger.debug("Successfully deleted!");
-        T responseDto = createResponseEntity(id, HttpStatus.OK.toString());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        T responseEntity = createResponseEntity(id, HttpStatus.OK.toString());
+        return new ResponseEntity<>(responseEntity, HttpStatus.OK);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -57,7 +58,7 @@ public abstract class AbstractCrudController<T extends BaseDto> {
         logger.debug("Dto successfully found!");
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
-
+    
     private T createResponseEntity(long id, String status) {
         T responseDto = getResponseDto();
         responseDto.setId(id);

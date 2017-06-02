@@ -47,15 +47,15 @@ public class AdminController {
     //TODO PUT???
     //работает
     @RequestMapping(value = "/unblockCard/", method = RequestMethod.POST)
-    public ResponseEntity unblockCard(@RequestBody CardDto cardDto) {
+    public ResponseEntity<CardDto> unblockCard(@RequestBody CardDto cardDto) {
         cardService.unblockCard(cardDto);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new CardDto(cardDto.getId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
     //работает
     @RequestMapping(value = "/deleteCard/{cardId}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteCard(@PathVariable long cardId) {
+    public ResponseEntity<CardDto> deleteCard(@PathVariable long cardId) {
         cardService.delete(cardId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new CardDto(cardId, HttpStatus.OK.toString()), HttpStatus.OK);
     }
 }

@@ -32,7 +32,7 @@ public class BillServiceImplTest {
     public void setUp() {
         actualBillDto = new BillDto();
         actualBillDto.setPassword("Hello");
-        actualBillDto.setMoney(1000);
+        actualBillDto.setMoney(1000L);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class BillServiceImplTest {
         long id = billService.save(actualBillDto);
 
         actualBillDto.setId(id);
-        actualBillDto.setMoney(1000000);
+        actualBillDto.setMoney(1000000L);
         billService.update(actualBillDto);
 
         expectedBillDto = billService.get(id);
@@ -69,7 +69,7 @@ public class BillServiceImplTest {
     public void testGetAll() {
         long id = billService.save(actualBillDto);
 
-        actualBillDto.setMoney(200);
+        actualBillDto.setMoney(200L);
         billService.save(actualBillDto);
 
         List<BillDto> bills = billService.getAll();

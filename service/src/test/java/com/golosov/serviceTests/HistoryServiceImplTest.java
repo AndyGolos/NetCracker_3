@@ -63,7 +63,7 @@ public class HistoryServiceImplTest {
 
         billDto = new BillDto();
         billDto.setPassword("Hello");
-        billDto.setMoney(1000);
+        billDto.setMoney(1000L);
 
         typeDto = new TypeDto();
         typeDto.setType("SuperCard");

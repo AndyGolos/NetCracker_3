@@ -8,15 +8,22 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 public class BillDto extends BaseDto {
 
-    //TODO поменять значение на LONG. Исправить тесты!
-    private long money;
+    //TODO Исправить тесты!
+    private Long money;
     private String password;
 
-    public long getMoney() {
+    public BillDto() {
+    }
+
+    public BillDto(long id, String httpStatus) {
+        super(id, httpStatus);
+    }
+
+    public Long getMoney() {
         return money;
     }
 
-    public void setMoney(long money) {
+    public void setMoney(Long money) {
         this.money = money;
     }
 
@@ -35,13 +42,13 @@ public class BillDto extends BaseDto {
 
         BillDto billDto = (BillDto) o;
 
-        if (money != billDto.money) return false;
+        if (money != null ? !money.equals(billDto.money) : billDto.money != null) return false;
         return password != null ? password.equals(billDto.password) : billDto.password == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (money ^ (money >>> 32));
+        int result = money != null ? money.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }

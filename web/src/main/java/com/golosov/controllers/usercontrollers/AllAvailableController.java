@@ -1,7 +1,5 @@
 package com.golosov.controllers.usercontrollers;
 
-import com.golosov.entities.User;
-import com.golosov.services.dto.dto.BaseDto;
 import com.golosov.services.dto.dto.UserDto;
 import com.golosov.services.interfaces.UserService;
 import org.apache.log4j.Logger;
