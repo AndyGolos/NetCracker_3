@@ -30,10 +30,10 @@ public abstract class AbstractCrudController<T extends BaseDto> {
         return new ResponseEntity<>(responseEntity, HttpStatus.CREATED);
     }
 
-    protected ResponseEntity<T> update(T dto) {
-        getService().update(dto);
+    protected ResponseEntity<T> update(T dto, long id) {
+        getService().update(dto, id);
         logger.debug("Successfully updated!");
-        T responseEntity = createResponseEntity(dto.getId(), HttpStatus.OK.toString());
+        T responseEntity = createResponseEntity(id, HttpStatus.OK.toString());
         return new ResponseEntity<>(responseEntity, HttpStatus.OK);
     }
 

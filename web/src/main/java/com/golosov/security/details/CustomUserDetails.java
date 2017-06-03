@@ -16,7 +16,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     private final String ROLE_PREFIX = "ROLE_";
 
-    public CustomUserDetails(User user) {
+    CustomUserDetails(User user) {
         super(user);
     }
 

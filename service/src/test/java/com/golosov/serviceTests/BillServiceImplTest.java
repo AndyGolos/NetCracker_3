@@ -57,9 +57,8 @@ public class BillServiceImplTest {
     public void testUpdate() {
         long id = billService.save(actualBillDto);
 
-        actualBillDto.setId(id);
         actualBillDto.setMoney(1000000L);
-        billService.update(actualBillDto);
+        billService.update(actualBillDto, id);
 
         expectedBillDto = billService.get(id);
         Assert.assertEquals("testUpdate() method failed: ", actualBillDto, expectedBillDto);

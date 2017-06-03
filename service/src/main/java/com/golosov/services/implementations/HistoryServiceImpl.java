@@ -47,9 +47,9 @@ public class HistoryServiceImpl implements HistoryService {
         Set<HistoryDto> historyDtos = new HashSet<>();
         try {
             Set<History> histories = historyDao.getHistoriesByCardId(cardId);
-            if(histories == null){
+            /*if(histories == null){
                 throw new NotFoundException("Histories not found!");
-            }
+            }*/
             logger.debug("All histories card with id: " + cardId + " successfully found!");
             histories.forEach(history -> {
                 HistoryDto historyDto = Converter.historyEntityToHistoryDtoConverter(history);
@@ -78,13 +78,14 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public void update(HistoryDto historyDto) {
+    public void update(HistoryDto historyDto, long id) {
         History currentHistory = Converter.historyDtoToHistoryEntityConverter(historyDto);
         try {
-            History history = historyDao.getById(currentHistory.getId());
+            History history = historyDao.getById(id);
             if(history == null){
                 throw new NotFoundException("History not found!");
             }
+            currentHistory.setId(id);
             historyDao.update(currentHistory);
             logger.debug("History: " + currentHistory + " successfully updated!");
         } catch (DaoException e) {

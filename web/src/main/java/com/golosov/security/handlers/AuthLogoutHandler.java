@@ -17,6 +17,7 @@ public class AuthLogoutHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(
+            //Работает
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {

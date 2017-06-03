@@ -1,12 +1,8 @@
 package com.golosov.services.implementations;
 
 import com.golosov.builders.HistoryBuilder;
-import com.golosov.dao.interfaces.BillDao;
-import com.golosov.dao.interfaces.CardDao;
-import com.golosov.dao.interfaces.HistoryDao;
-import com.golosov.entities.Bill;
-import com.golosov.entities.Card;
-import com.golosov.entities.History;
+import com.golosov.dao.interfaces.*;
+import com.golosov.entities.*;
 import com.golosov.exceptions.DaoException;
 import com.golosov.services.dto.Converter;
 import com.golosov.services.dto.dto.CardDto;
@@ -39,14 +35,28 @@ public class CardServiceImpl implements CardService {
     private HistoryDao historyDao;
     @Autowired
     private BillDao billDao;
+    @Autowired
+    private TypeDao typeDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public long save(CardDto cardDto) {
         Card card = Converter.cardDtoToCardEntityConverter(cardDto);
-        card.setStatus(true);
-        card.setRegistration(LocalDate.now());
-        card.setValidity(LocalDate.now().plusYears(5));
         try {
+            Bill bill = billDao.getById(card.getBill().getId());
+            Type type = typeDao.getById(card.getType().getId());
+            User user = userDao.getById(card.getUser().getId());
+            if(bill == null){
+                throw new NotFoundException("Bill not found!");
+            } else if(type==null){
+                throw new NotFoundException("Type not found!");
+            } else if(user==null){
+                throw new NotFoundException("User not found!");
+            }
+            card.setStatus(true);
+            card.setRegistration(LocalDate.now());
+            card.setValidity(card.getRegistration().plusYears(5));
             cardDao.save(card);
             logger.debug("Card: " + card + " successfully saved!");
         } catch (DaoException e) {
@@ -89,13 +99,14 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void update(CardDto cardDto) {
+    public void update(CardDto cardDto, long id) {
         Card currentCard = Converter.cardDtoToCardEntityConverter(cardDto);
         try {
-            Card card = cardDao.getById(currentCard.getId());
+            Card card = cardDao.getById(id);
             if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
+            currentCard.setId(id);
             cardDao.update(currentCard);
             logger.debug("Card: " + currentCard + " successfully updated!");
         } catch (DaoException e) {
@@ -105,15 +116,15 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void unblockCard(CardDto cardDto) {
-        Card currentCard = Converter.cardDtoToCardEntityConverter(cardDto);
+    public void unblockCard(long id) {
         try {
-            Card card = cardDao.getById(currentCard.getId());
+            Card card = cardDao.getById(id);
             if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
-            cardDao.unblockCard(currentCard);
-            logger.debug("Card: " + currentCard + " successfully unblocked!");
+            //TODO может проверку на блокировку запилить
+            cardDao.unblockCard(card);
+            logger.debug("Card: " + card + " successfully unblocked!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card unblock: " + e);
             throw new ServiceException(e);
@@ -155,15 +166,14 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void blockCard(CardDto cardDto) {
-        Card currentCard = Converter.cardDtoToCardEntityConverter(cardDto);
+    public void blockCard(long id) {
         try {
-            Card card = cardDao.getById(cardDto.getId());
+            Card card = cardDao.getById(id);
             if (card == null) {
                 throw new NotFoundException("Card not found!");
             }
-            cardDao.blockCard(currentCard);
-            logger.debug("Card: " + currentCard + " successfully blocked!");
+            cardDao.blockCard(card);
+            logger.debug("Card: " + card + " successfully blocked!");
         } catch (DaoException e) {
             logger.error("Error was thrown in card service method card block: " + e);
             throw new ServiceException(e);
@@ -171,6 +181,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    //TODO добавить уточнение к ошибкам!
     public boolean transferMoney(TransferDto transferDto) {
         try {
             Card fromCard = cardDao.getById(transferDto.getFromCardId());

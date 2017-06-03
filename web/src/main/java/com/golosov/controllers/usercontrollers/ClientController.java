@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -20,7 +21,7 @@ import java.util.Set;
  * Created by Андрей on 18.05.2017.
  */
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/api")
 public class ClientController {
 
     private final Logger logger = Logger.getLogger(ClientController.class);
@@ -34,34 +35,26 @@ public class ClientController {
     @Autowired
     private HistoryService historyService;
 
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<UserDto> getUser(@PathVariable long id) {
-        UserDto user = userService.get(id);
-        logger.debug("User successfully found!");
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
     //работает
-    /*@RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails authorizedUser = (CustomUserDetails) authentication.getPrincipal();
-        UserDto user = userService.get(authorizedUser.getId());
+        long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        UserDto user = userService.get(userId);
         logger.debug("User info successfully found!");
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }*/
-
-    //Работает
-    @RequestMapping(value = "/blockCard/", method = RequestMethod.POST)
-    public ResponseEntity<CardDto> blockCard(@RequestBody CardDto cardDto) {
-        cardService.blockCard(cardDto);
-        logger.debug("Card successfully blocked!");
-        return new ResponseEntity<>(new CardDto(cardDto.getId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
     //Работает
-    @RequestMapping(value = "/replenishBill/", method = RequestMethod.POST)
+    @RequestMapping(value = "/cards/blockCard/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<CardDto> blockCard(@PathVariable long id) {
+        //TODO только для пользователя.
+        cardService.blockCard(id);
+        logger.debug("Card successfully blocked!");
+        return new ResponseEntity<>(new CardDto(id, HttpStatus.OK.toString()), HttpStatus.OK);
+    }
+
+    //Работает
+    @RequestMapping(value = "/bills/replenishBill", method = RequestMethod.POST)
     public ResponseEntity<BillDto> replenishBill(@RequestBody BillDto billDto) {
         billService.replenishBill(billDto);
         logger.debug("Bill successfully replenished!");
@@ -70,25 +63,27 @@ public class ClientController {
 
     //Работает
     //TODO добавить response entity?
-    @RequestMapping(value = "/transferMoney/", method = RequestMethod.POST)
+    @RequestMapping(value = "/cards/transferMoney", method = RequestMethod.POST)
     public ResponseEntity transferMoney(@RequestBody TransferDto transferDto) {
+        //TODO только для пользователя.
         cardService.transferMoney(transferDto);
         logger.debug("Money successfully transfered!");
         return new ResponseEntity(HttpStatus.OK);
     }
 
     //Работает
-    //TODO в методе валидацию сделать на bill user type
-    @RequestMapping(value = "/createCard/", method = RequestMethod.POST)
+    @RequestMapping(value = "/cards/createCard", method = RequestMethod.POST)
     public ResponseEntity<CardDto> createCard(@RequestBody CardDto cardDto) {
+        //TODO только для пользователя.
         long cardId = cardService.save(cardDto);
         logger.debug("Card successfully created!");
         return new ResponseEntity<>(new CardDto(cardId, HttpStatus.CREATED.toString()), HttpStatus.CREATED);
     }
 
     //Работает
-    @RequestMapping(value = "/histories/{cardId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cards/{cardId}/histories", method = RequestMethod.GET)
     public ResponseEntity<Set<HistoryDto>> getHistoriesOfCard(@PathVariable long cardId) {
+        //TODO только для пользователя.
         Set<HistoryDto> histories = historyService.findCardHistory(cardId);
         logger.debug("Histories successfully found!");
         return new ResponseEntity<>(histories, HttpStatus.OK);

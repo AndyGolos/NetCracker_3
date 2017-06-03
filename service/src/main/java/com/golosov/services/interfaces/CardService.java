@@ -12,9 +12,9 @@ public interface CardService extends BaseService<CardDto> {
 
     Set<CardDto> findUsersCards(long id);
 
-    void unblockCard(CardDto cardDto);
+    void unblockCard(long id);
 
-    void blockCard(CardDto cardDto);
+    void blockCard(long id);
 
     boolean transferMoney(TransferDto transferDto);
 }

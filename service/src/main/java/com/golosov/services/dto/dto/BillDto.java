@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 public class BillDto extends BaseDto {
 
-    //TODO Исправить тесты!
     private Long money;
     private String password;
 

@@ -8,7 +8,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Set;
@@ -17,45 +20,19 @@ import java.util.Set;
  * Created by Андрей on 18.05.2017.
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api")
 public class AdminController {
 
     private final Logger logger = Logger.getLogger(AdminController.class);
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private CardService cardService;
 
     //работает
-    @RequestMapping(value = "/users/", method = RequestMethod.GET)
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = userService.getAll();
-        logger.debug("All users successfully found!");
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    //TODO одинаковые методы в admin и client
-    //работает
-    @RequestMapping(value = "/cards/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<Set<CardDto>> getUsersCards(@PathVariable long userId) {
-        Set<CardDto> usersCards = cardService.findUsersCards(userId);
-        logger.debug("All users successfully found!");
-        return new ResponseEntity<>(usersCards, HttpStatus.OK);
-    }
-
-    //TODO PUT???
-    //работает
-    @RequestMapping(value = "/unblockCard/", method = RequestMethod.POST)
-    public ResponseEntity<CardDto> unblockCard(@RequestBody CardDto cardDto) {
-        cardService.unblockCard(cardDto);
-        return new ResponseEntity<>(new CardDto(cardDto.getId(), HttpStatus.OK.toString()), HttpStatus.OK);
-    }
-
-    //работает
-    @RequestMapping(value = "/deleteCard/{cardId}", method = RequestMethod.DELETE)
-    public ResponseEntity<CardDto> deleteCard(@PathVariable long cardId) {
-        cardService.delete(cardId);
-        return new ResponseEntity<>(new CardDto(cardId, HttpStatus.OK.toString()), HttpStatus.OK);
+    @RequestMapping(value = "/unblockCard/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<CardDto> unblockCard(@PathVariable long id) {
+        cardService.unblockCard(id);
+        logger.debug("Successfully unblocked!");
+        return new ResponseEntity<>(new CardDto(id, HttpStatus.OK.toString()), HttpStatus.OK);
     }
 }

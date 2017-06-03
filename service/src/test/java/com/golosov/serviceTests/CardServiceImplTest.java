@@ -98,9 +98,8 @@ public class CardServiceImplTest {
         actualCardDto.setType(typeId);
         long cardId = cardService.save(actualCardDto);
 
-        actualCardDto.setId(cardId);
         actualCardDto.setPassword("LOCALHOST8080");
-        cardService.update(actualCardDto);
+        cardService.update(actualCardDto, cardId);
 
         expectedCardDto = cardService.get(cardId);
         Assert.assertEquals("testUpdate() method failed: ", actualCardDto, expectedCardDto);

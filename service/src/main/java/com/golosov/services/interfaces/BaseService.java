@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface BaseService<T extends BaseDto> {
 
-    long save(T entity);
+    long save(T dto);
 
     void delete(long id);
 
-    void update(T entity);
+    void update(T dto, long id);
 
     List<T> getAll();
 

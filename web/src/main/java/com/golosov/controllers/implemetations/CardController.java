@@ -7,29 +7,26 @@ import com.golosov.services.interfaces.CardService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Андрей on 18.05.2017.
  */
 @RestController
-@RequestMapping("/cards")
+@RequestMapping("/api/cards")
 public class CardController extends AbstractCrudController<CardDto> {
 
     @Autowired
     private CardService cardService;
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<CardDto> saveCard(@RequestBody CardDto cardDto) {
         return save(cardDto);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public ResponseEntity updateCard(@RequestBody CardDto cardDto) {
-        return update(cardDto);
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity updateCard(@RequestBody CardDto cardDto, @PathVariable long id) {
+        return update(cardDto, id);
     }
 
     @Override

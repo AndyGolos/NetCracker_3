@@ -59,9 +59,8 @@ public class RoleServiceImplTest {
     public void testUpdate() {
         long id = roleService.save(actualRoleDto);
 
-        actualRoleDto.setId(id);
         actualRoleDto.setRole("SuperVip");
-        roleService.update(actualRoleDto);
+        roleService.update(actualRoleDto, id);
 
         expectedRoleDto = roleService.get(id);
         Assert.assertEquals("testUpdate() method failed: ", actualRoleDto, expectedRoleDto);

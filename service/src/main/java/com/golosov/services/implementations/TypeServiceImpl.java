@@ -57,13 +57,14 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
-    public void update(TypeDto typeDto) {
+    public void update(TypeDto typeDto, long id) {
         Type currentType = Converter.typeDtoToTypeEntityConverter(typeDto);
         try {
-            Type type = typeDao.getById(currentType.getId());
+            Type type = typeDao.getById(id);
             if(type == null){
                 throw new NotFoundException("Type not found!");
             }
+            currentType.setId(id);
             typeDao.update(currentType);
             logger.debug("Type: " + currentType + " successfully updated!");
         } catch (DaoException e) {

@@ -7,6 +7,7 @@ import com.golosov.exceptions.DaoException;
 import com.golosov.services.dto.Converter;
 import com.golosov.services.dto.dto.UserDto;
 import com.golosov.services.exceptions.ExistUserException;
+import com.golosov.services.exceptions.IncorrectPasswordException;
 import com.golosov.services.exceptions.NotFoundException;
 import com.golosov.services.exceptions.ServiceException;
 import com.golosov.services.interfaces.UserService;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         User user = Converter.userDtoToTypeEntityConverter(userDto);
         try {
             User currentUser = userDao.getByEmail(user.getEmail());
-            if(currentUser == null){
+            if (currentUser == null) {
                 throw new NotFoundException("User not found!");
             }
             logger.debug("User by email: " + user.getEmail() + " successfully found!");
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public void delete(long id) {
         try {
             User user = userDao.getById(id);
-            if(user == null){
+            if (user == null) {
                 throw new NotFoundException("User not found!");
             }
             userDao.delete(id);
@@ -88,13 +89,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserDto userDto) {
+    public void update(UserDto userDto, long id) {
         User currentUser = Converter.userDtoToTypeEntityConverter(userDto);
         try {
-            User user = userDao.getById(currentUser.getId());
-            if(user == null){
+            User user = userDao.getById(id);
+            if (user == null) {
                 throw new NotFoundException("User not found!");
             }
+            currentUser.setId(id);
             userDao.update(currentUser);
             logger.debug("User: " + currentUser + " successfully updated!");
         } catch (DaoException e) {
@@ -125,7 +127,7 @@ public class UserServiceImpl implements UserService {
         UserDto userDto;
         try {
             User user = userDao.getById(id);
-            if(user == null){
+            if (user == null) {
                 throw new NotFoundException("User not found!");
             }
             logger.debug("User by id: " + id + " successfully found!");
@@ -135,5 +137,17 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return userDto;
+    }
+
+    @Override
+    public long login(UserDto userDto) {
+        User user = userDao.getByEmail(userDto.getEmail());
+        if (user == null) {
+            throw new NotFoundException("User not found!");
+        } else if (!user.getPassword().equals(userDto.getPassword())) {
+            throw new IncorrectPasswordException("Incorrect password entered!");
+        } else {
+            return user.getId();
+        }
     }
 }

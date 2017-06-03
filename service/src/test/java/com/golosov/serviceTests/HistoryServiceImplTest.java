@@ -95,9 +95,8 @@ public class HistoryServiceImplTest {
     public void testUpdate() {
         long id = saveCardBillTypeUserAndHistory();
 
-        actualHistoryDto.setId(id);
         actualHistoryDto.setValueChange("0");
-        historyService.update(actualHistoryDto);
+        historyService.update(actualHistoryDto, id);
 
         expectedHistoryDto = historyService.get(id);
         Assert.assertEquals("testUpdate() method failed: ", actualHistoryDto, expectedHistoryDto);

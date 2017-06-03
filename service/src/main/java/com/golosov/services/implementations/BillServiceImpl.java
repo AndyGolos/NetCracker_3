@@ -85,13 +85,14 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void update(BillDto billDto) {
+    public void update(BillDto billDto, long id) {
         Bill currentBill = Converter.billDtoToBillEntityConverter(billDto);
         try {
-            Bill bill = billDao.getById(currentBill.getId());
+            Bill bill = billDao.getById(id);
             if(bill == null){
                 throw new NotFoundException("Bill not found!");
             }
+            currentBill.setId(id);
             billDao.update(currentBill);
             logger.debug("Bill: " + currentBill + " successfully updated!");
         } catch (DaoException e) {

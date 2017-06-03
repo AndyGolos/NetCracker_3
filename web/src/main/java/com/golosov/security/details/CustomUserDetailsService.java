@@ -3,6 +3,7 @@ package com.golosov.security.details;
 import com.golosov.dao.interfaces.UserDao;
 import com.golosov.entities.User;
 import com.golosov.security.details.CustomUserDetails;
+import com.golosov.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

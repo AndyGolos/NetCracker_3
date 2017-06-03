@@ -12,6 +12,7 @@ public class CardDto extends BaseDto {
     private long userId;
     private long type;
     private String password;
+    //TODO не выводит , если статус = false
     private boolean isActive;
     private String registration;
     private String validity;

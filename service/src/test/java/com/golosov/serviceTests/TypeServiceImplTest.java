@@ -57,9 +57,8 @@ public class TypeServiceImplTest {
     public void testUpdate(){
         long id = typeService.save(actualTypeDto);
 
-        actualTypeDto.setId(id);
         actualTypeDto.setType("UnbeliveableSuperCard");
-        typeService.update(actualTypeDto);
+        typeService.update(actualTypeDto, id);
 
         expectedTypeDto = typeService.get(id);
         Assert.assertEquals("testUpdate() method failed: ",actualTypeDto, expectedTypeDto);

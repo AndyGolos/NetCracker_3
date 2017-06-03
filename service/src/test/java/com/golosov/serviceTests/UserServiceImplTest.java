@@ -68,9 +68,8 @@ public class UserServiceImplTest {
     public void testUpdate() {
         long id = userService.save(actualUserDto);
 
-        actualUserDto.setId(id);
         actualUserDto.setName("LOCALHOST8080");
-        userService.update(actualUserDto);
+        userService.update(actualUserDto, id);
 
         expectedUserDto = userService.get(id);
         Assert.assertEquals("testUpdate() method failed: ", actualUserDto, expectedUserDto);

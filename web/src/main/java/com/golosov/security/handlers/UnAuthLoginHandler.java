@@ -17,6 +17,7 @@ public class UnAuthLoginHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(
+            //Работает
             HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException e) throws IOException, ServletException {

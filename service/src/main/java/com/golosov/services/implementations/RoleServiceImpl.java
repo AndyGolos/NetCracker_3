@@ -57,13 +57,14 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void update(RoleDto roleDto) {
+    public void update(RoleDto roleDto, long id) {
         Role currentRole = Converter.roleDtoToRoleEntityConverter(roleDto);
         try {
-            Role role = roleDao.getById(currentRole.getId());
+            Role role = roleDao.getById(id);
             if (role == null) {
                 throw new NotFoundException("Role not found!");
             }
+            currentRole.setId(id);
             roleDao.update(currentRole);
             logger.debug("Role: " + currentRole + " successfully updated!");
         } catch (DaoException e) {
