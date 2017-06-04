@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -38,7 +39,7 @@ public class AdminController extends BaseController {
         this.roleService = roleService;
     }
 
-    @RequestMapping(value = "/unblockCard/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/cards/unblockCard/{id}", method = RequestMethod.PUT)
     public ResponseEntity<SuccessResponse> unblockCard(@PathVariable long id) {
         cardService.unblockCard(id);
         logger.debug("Successfully unblocked!");

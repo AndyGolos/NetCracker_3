@@ -46,7 +46,7 @@ public class ClientController extends BaseController {
         this.historyService = historyService;
     }
 
-    @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser() {
         long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         UserDto user = userService.get(userId);
@@ -54,14 +54,14 @@ public class ClientController extends BaseController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/users/cards", method = RequestMethod.GET)
+    @RequestMapping(value = "/usercards", method = RequestMethod.GET)
     public ResponseEntity<List<CardDto>> getUserCards() {
         long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<CardDto> cards = cardService.findUsersCards(userId);
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/cards/blockCard/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/blockCard/{id}", method = RequestMethod.PUT)
     public ResponseEntity<SuccessResponse> blockCard(@PathVariable long id) {
         cardAccessRights(id);
         cardService.blockCard(id);
@@ -69,14 +69,14 @@ public class ClientController extends BaseController {
         return new ResponseEntity<>(new SuccessResponse(id, HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/bills/replenishBill", method = RequestMethod.POST)
+    @RequestMapping(value = "/replenishBill", method = RequestMethod.POST)
     public ResponseEntity<SuccessResponse> replenishBill(@RequestBody ReplenishDto replenishDto) {
         billService.replenishBill(replenishDto);
         logger.debug("Bill successfully replenished!");
         return new ResponseEntity<>(new SuccessResponse(replenishDto.getCardId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/cards/transferMoney", method = RequestMethod.POST)
+    @RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
     public ResponseEntity<SuccessResponse> transferMoney(@RequestBody TransferDto transferDto) {
         cardAccessRights(transferDto.getFromCardId());
         cardService.transferMoney(transferDto);
@@ -85,7 +85,7 @@ public class ClientController extends BaseController {
     }
 
     //Только клиент может создавать себе карточку.
-    @RequestMapping(value = "/cards/createCard", method = RequestMethod.POST)
+    @RequestMapping(value = "/createCard", method = RequestMethod.POST)
     public ResponseEntity<SuccessResponse> createCard(@RequestBody CardDto cardDto) {
         long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         if (!(cardDto.getUserId() == userId)) {
@@ -96,7 +96,7 @@ public class ClientController extends BaseController {
         return new ResponseEntity<>(new SuccessResponse(cardId, HttpStatus.CREATED.toString()), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/cards/{cardId}/histories", method = RequestMethod.GET)
+    @RequestMapping(value = "/{cardId}/histories", method = RequestMethod.GET)
     public ResponseEntity<List<HistoryDto>> getHistoriesOfCard(@PathVariable long cardId) {
         cardAccessRights(cardId);
         List<HistoryDto> histories = historyService.findCardHistory(cardId);

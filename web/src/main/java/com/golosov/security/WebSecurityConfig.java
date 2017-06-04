@@ -1,6 +1,7 @@
 package com.golosov.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 /**
  * Created by Андрей on 24.05.2017.
  */
+//TODO подправить урлы
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -43,20 +45,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/register").anonymous()
                 .antMatchers(
                         "/api/types/**",
-                        "/api/bills/**",
-                        "/api/cards/**",
                         "/api/histories/**",
                         "/api/roles/**",
-                        "/api/users/**")
-                .hasRole("Администратор")
+                        "/api/users/**",
+                        "/api/bills/**",
+                        "/api/cards/**",
+                        "/api/registerAdmin"
+                ).hasRole("Администратор")
                 .antMatchers(
-                        "/api/users/profile",
-                        "/api/cards/blockCard/*",
-                        "/api/bills/replenishBill",
-                        "/api/cards/transferMoney",
-                        "/api/cards/createCard",
-                        "/api/cards/*/histories")
-                .hasRole("Клиент")
+                        "/api/profile",
+                        "/api/usercards"
+                ).hasAnyRole("Клиент","Администратор")
+                .antMatchers(
+                        "/api/blockCard/*",
+                        "/api/replenishBill",
+                        "/api/transferMoney",
+                        "/api/createCard",
+                        "/api/*/histories"
+                ).hasRole("Клиент")
 
                 .and()
                 .logout()

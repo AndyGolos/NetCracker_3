@@ -1,0 +1,836 @@
+{
+	"variables": [],
+	"info": {
+		"name": "PaymentSystem",
+		"_postman_id": "a6b385ce-b8ca-1a9e-b3c2-bc45229a5492",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"description": "",
+			"item": [
+				{
+					"name": "Найти всех пользователей",
+					"request": {
+						"url": "http://localhost:8080/api/users",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти карточку по id",
+					"request": {
+						"url": "http://localhost:8080/api/cards/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Узнать роли пользователя по его id",
+					"request": {
+						"url": "http://localhost:8080/api/users/1/roles",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Разблокировать карточку",
+					"request": {
+						"url": "http://localhost:8080/api/cards/unblockCard/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить карточку",
+					"request": {
+						"url": "http://localhost:8080/api/cards/2",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать администратора",
+					"request": {
+						"url": "http://localhost:8080/api/registerAdmin",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Test\",\n    \"lastname\": \"Test\",\n    \"surname\": \"Test\",\n    \"email\": \"Test@mail.ru\",\n    \"password\": \"Test\",\n    \"birth\": \"21.07.1996\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"description": "",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"url": "http://localhost:8080/api/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"andygolosov@mail.ru\",\n\t\"password\": \"1234\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Зарегестрировать пользователя",
+					"request": {
+						"url": "http://localhost:8080/api/register",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Test\",\n    \"lastname\": \"Test\",\n    \"surname\": \"Test\",\n    \"email\": \"T2est@mail.ru\",\n    \"password\": \"Test\",\n    \"birth\": \"21.07.1996\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"url": "http://localhost:8080/logout",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bills",
+			"description": "",
+			"item": [
+				{
+					"name": "Список всех счетов",
+					"request": {
+						"url": "http://localhost:8080/api/bills",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти счёт по id",
+					"request": {
+						"url": "http://localhost:8080/api/bills/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить счёт",
+					"request": {
+						"url": "http://localhost:8080/api/bills/2",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать счёт",
+					"request": {
+						"url": "http://localhost:8080/api/bills",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"money\": 200,\n\t\"password\": \"TestTestTest\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить счёт",
+					"request": {
+						"url": "http://localhost:8080/api/bills/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"money\": 100,\n\t\"password\": \"1234\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cards",
+			"description": "",
+			"item": [
+				{
+					"name": "Список всех карточек",
+					"request": {
+						"url": "http://localhost:8080/api/cards",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти карточку по id",
+					"request": {
+						"url": "http://localhost:8080/api/cards/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить карточку",
+					"request": {
+						"url": "http://localhost:8080/api/cards/2",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить карточку",
+					"request": {
+						"url": "http://localhost:8080/api/cards/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"billId\": 1,\n  \"userId\": 1,\n  \"type\": 2,\n  \"password\": \"100000\",\n  \"registration\": \"01.06.2017\",\n  \"validity\": \"01.06.2022\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать карточку",
+					"request": {
+						"url": "http://localhost:8080/api/cards",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"billId\": 1,\n  \"userId\": 1,\n  \"type\": 2,\n  \"password\": \"100000\",\n  \"registration\": \"01.06.2017\",\n  \"validity\": \"01.06.2022\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"description": "",
+			"item": [
+				{
+					"name": "Информация о клиенте",
+					"request": {
+						"url": "http://localhost:8080/api/profile",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "andygolosov@mail.ru",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Карточки клиента",
+					"request": {
+						"url": "http://localhost:8080/api/usercards",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти истории по id карточки",
+					"request": {
+						"url": "http://localhost:8080/api/2/histories",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Пополнить счёт",
+					"request": {
+						"url": "http://localhost:8080/api/replenishBill",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cardId\": 1,\n\t\"billId\": 1,\n\t\"money\": 1000,\n\t\"password\": \"100000\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Перевести деньги со счёта на счёт",
+					"request": {
+						"url": "http://localhost:8080/api/transferMoney",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fromCardId\": 1,\n\t\"fromCardPassword\": \"1234\",\n\t\"toCardId\": 2,\n\t\"amountOfMoney\": 200\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать карточку",
+					"request": {
+						"url": "http://localhost:8080/api/createCard",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"billId\": 1,\n\t\"userId\": 1,\n\t\"type\": 3,\n\t\"password\": \"100000\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Заблокировать карточку",
+					"request": {
+						"url": "http://localhost:8080/api/blockCard/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Histories",
+			"description": "",
+			"item": [
+				{
+					"name": "Список всех историй",
+					"request": {
+						"url": "http://localhost:8080/api/histories",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти историю по id",
+					"request": {
+						"url": "http://localhost:8080/api/histories/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать историю",
+					"request": {
+						"url": "http://localhost:8080/api/histories",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cardId\": 1,\n\t\"valueChange\": \"+200\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить историю",
+					"request": {
+						"url": "http://localhost:8080/api/histories/98",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить историю",
+					"request": {
+						"url": "http://localhost:8080/api/histories/98",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cardId\": 1,\n\t\"valueChange\": \"+200000\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"description": "",
+			"item": [
+				{
+					"name": "Список всех ролей",
+					"request": {
+						"url": "http://localhost:8080/api/roles",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти роль по id",
+					"request": {
+						"url": "http://localhost:8080/api/roles/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать роль",
+					"request": {
+						"url": "http://localhost:8080/api/roles",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"role\": \"Manager\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить роль",
+					"request": {
+						"url": "http://localhost:8080/api/roles/286",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить роль",
+					"request": {
+						"url": "http://localhost:8080/api/roles/135",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"role\": \"TestAdmin\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Types",
+			"description": "",
+			"item": [
+				{
+					"name": "Список всех типов карточек",
+					"request": {
+						"url": "http://localhost:8080/api/types",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"Test\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти тип по id",
+					"request": {
+						"url": "http://localhost:8080/api/types/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить тип",
+					"request": {
+						"url": "http://localhost:8080/api/types/4",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать тип",
+					"request": {
+						"url": "http://localhost:8080/api/types",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"TESTTESTTEST\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить тип",
+					"request": {
+						"url": "http://localhost:8080/api/types/572",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"TESTTYP\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"description": "",
+			"item": [
+				{
+					"name": "Найти всех пользователей",
+					"request": {
+						"url": "http://localhost:8080/api/users",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"qwerty\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Создать пользователя",
+					"request": {
+						"url": "http://localhost:8080/api/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test\",\n    \"lastname\": \"Test\",\n    \"surname\": \"Test\",\n    \"email\": \"Test@mail.ru\",\n    \"password\": \"Test\",\n    \"birth\": \"21.07.1996\"\n  }"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить пользователя",
+					"request": {
+						"url": "http://localhost:8080/api/users/3",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test2\",\n    \"lastname\": \"Test2\",\n    \"surname\": \"Test2\",\n    \"email\": \"Test@mail.ru2\",\n    \"password\": \"Test\",\n    \"birth\": \"21.07.1996\",\n    \"registration\": \"23.05.2017\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Удалить пользователя",
+					"request": {
+						"url": "http://localhost:8080/api/users/3",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Найти пользователя по id",
+					"request": {
+						"url": "http://localhost:8080/api/users/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
