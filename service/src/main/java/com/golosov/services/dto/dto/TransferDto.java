@@ -51,4 +51,36 @@ public class TransferDto {
     public void setAmountOfMoney(long amountOfMoney) {
         this.amountOfMoney = amountOfMoney;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TransferDto that = (TransferDto) o;
+
+        if (fromCardId != that.fromCardId) return false;
+        if (toCardId != that.toCardId) return false;
+        if (amountOfMoney != that.amountOfMoney) return false;
+        return fromCardPassword != null ? fromCardPassword.equals(that.fromCardPassword) : that.fromCardPassword == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (fromCardId ^ (fromCardId >>> 32));
+        result = 31 * result + (fromCardPassword != null ? fromCardPassword.hashCode() : 0);
+        result = 31 * result + (int) (toCardId ^ (toCardId >>> 32));
+        result = 31 * result + (int) (amountOfMoney ^ (amountOfMoney >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TransferDto{" +
+                "fromCardId=" + fromCardId +
+                ", fromCardPassword='" + fromCardPassword + '\'' +
+                ", toCardId=" + toCardId +
+                ", amountOfMoney=" + amountOfMoney +
+                '}';
+    }
 }

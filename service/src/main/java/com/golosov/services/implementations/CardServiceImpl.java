@@ -7,10 +7,7 @@ import com.golosov.exceptions.DaoException;
 import com.golosov.services.dto.Converter;
 import com.golosov.services.dto.dto.CardDto;
 import com.golosov.services.dto.dto.TransferDto;
-import com.golosov.services.exceptions.IncorrectPasswordException;
-import com.golosov.services.exceptions.NotEnoughMoneyException;
-import com.golosov.services.exceptions.NotFoundException;
-import com.golosov.services.exceptions.ServiceException;
+import com.golosov.services.exceptions.*;
 import com.golosov.services.interfaces.CardService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +44,11 @@ public class CardServiceImpl implements CardService {
             Bill bill = billDao.getById(card.getBill().getId());
             Type type = typeDao.getById(card.getType().getId());
             User user = userDao.getById(card.getUser().getId());
-            if(bill == null){
+            if (bill == null) {
                 throw new NotFoundException("Bill not found!");
-            } else if(type==null){
+            } else if (type == null) {
                 throw new NotFoundException("Type not found!");
-            } else if(user==null){
+            } else if (user == null) {
                 throw new NotFoundException("User not found!");
             }
             card.setStatus(true);
@@ -82,10 +79,10 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Set<CardDto> findUsersCards(long id) {
-        Set<CardDto> cardDtos = new HashSet<>();
+    public List<CardDto> findUsersCards(long id) {
+        List<CardDto> cardDtos = new ArrayList<>();
         try {
-            Set<Card> userCards = cardDao.getAllCardsByUserId(id);
+            List<Card> userCards = cardDao.getAllCardsByUserId(id);
             logger.debug("All user's cards with id: " + id + " successfully found!");
             userCards.forEach(card -> {
                 CardDto cardDto = Converter.cardEntityToCardDtoConverter(card);
@@ -121,8 +118,9 @@ public class CardServiceImpl implements CardService {
             Card card = cardDao.getById(id);
             if (card == null) {
                 throw new NotFoundException("Card not found!");
+            } else if(card.isStatus()){
+                throw new CardStatusException("Card is already active!");
             }
-            //TODO может проверку на блокировку запилить
             cardDao.unblockCard(card);
             logger.debug("Card: " + card + " successfully unblocked!");
         } catch (DaoException e) {
@@ -171,6 +169,8 @@ public class CardServiceImpl implements CardService {
             Card card = cardDao.getById(id);
             if (card == null) {
                 throw new NotFoundException("Card not found!");
+            } else if(!card.isStatus()){
+                throw new CardStatusException("Card is already blocked!");
             }
             cardDao.blockCard(card);
             logger.debug("Card: " + card + " successfully blocked!");
@@ -181,12 +181,13 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    //TODO добавить уточнение к ошибкам!
     public boolean transferMoney(TransferDto transferDto) {
         try {
             Card fromCard = cardDao.getById(transferDto.getFromCardId());
             if (fromCard == null) {
-                throw new NotFoundException("Bill not found!");
+                throw new NotFoundException("Card by id " + transferDto.getFromCardId() + " not found!");
+            } else if (!fromCard.isStatus()) {
+                throw new CardStatusException("Card by id " + transferDto.getFromCardId() + " is blocked!");
             }
             logger.debug("Card: " + fromCard + " successfully found!");
 
@@ -195,9 +196,12 @@ public class CardServiceImpl implements CardService {
 
             Card toCard = cardDao.getById(transferDto.getToCardId());
             if (toCard == null) {
-                throw new NotFoundException("Bill not found!");
+                throw new NotFoundException("Card by id " + transferDto.getToCardId() + " not found!");
+            } else if (!toCard.isStatus()) {
+                throw new CardStatusException("Card by id " + transferDto.getToCardId() + " is blocked!");
             }
             logger.debug("Card: " + toCard + " successfully found!");
+
             Bill toBill = billDao.getById(toCard.getBill().getId());
             logger.debug("Bill: " + toBill + " successfully found!");
 

@@ -23,7 +23,7 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
     public RoleDaoImpl() {
         super(Role.class, FROM_ROLE);
     }
-
+    //TODO
     public Set<Role> getRolesByUserId(long id) {
         Set<Role> roles = null;
         try {

@@ -14,9 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    private final AuthenticationManager authenticationManager;
-
-    private final UserDetailsService userDetailsService;
+    private AuthenticationManager authenticationManager;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     public LoginServiceImpl(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {

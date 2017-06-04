@@ -28,7 +28,6 @@ public class BillDaoImpl extends AbstractDao<Bill> implements BillDao {
         } catch (HibernateException e) {
             logger.error("Error was thrown in billDaoImpl method setMoney: " + e);
             throw new DaoException(e);
-            /*"Cant set money on bill! " + */
         }
     }
 }

@@ -2,6 +2,7 @@ package com.golosov.dao.interfaces;
 
 import com.golosov.entities.History;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,5 +10,5 @@ import java.util.Set;
  */
 public interface HistoryDao extends BaseDao<History> {
 
-    Set<History> getHistoriesByCardId(long id);
+    List<History> getHistoriesByCardId(long id);
 }

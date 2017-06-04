@@ -1,11 +1,10 @@
 package com.golosov.controllers.implemetations;
 
 import com.golosov.controllers.abstracts.AbstractCrudController;
-import com.golosov.services.dto.dto.BaseDto;
+import com.golosov.controllers.responses.SuccessResponse;
 import com.golosov.services.dto.dto.BillDto;
 import com.golosov.services.interfaces.BaseService;
 import com.golosov.services.interfaces.BillService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/bills")
 public class BillController extends AbstractCrudController<BillDto> {
 
-    @Autowired
     private BillService billService;
 
+    @Autowired
+    public BillController(BillService billService) {
+        this.billService = billService;
+    }
+
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<BillDto> saveBill(@RequestBody BillDto billDto) {
+    public ResponseEntity<SuccessResponse> saveBill(@RequestBody BillDto billDto) {
         return save(billDto);
     }
 
@@ -33,10 +36,5 @@ public class BillController extends AbstractCrudController<BillDto> {
     @Override
     protected BaseService<BillDto> getService() {
         return billService;
-    }
-
-    @Override
-    protected BillDto getResponseDto() {
-        return new BillDto();
     }
 }

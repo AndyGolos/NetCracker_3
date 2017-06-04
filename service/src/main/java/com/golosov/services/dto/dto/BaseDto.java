@@ -9,14 +9,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public abstract class BaseDto {
 
     private long id;
-    private String httpStatus;
 
     public BaseDto() {
     }
 
-    public BaseDto(long id, String httpStatus) {
+    public BaseDto(long id) {
         this.id = id;
-        this.httpStatus = httpStatus;
     }
 
     public long getId() {
@@ -25,13 +23,5 @@ public abstract class BaseDto {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getHttpStatus() {
-        return httpStatus;
-    }
-
-    public void setHttpStatus(String httpStatus) {
-        this.httpStatus = httpStatus;
     }
 }

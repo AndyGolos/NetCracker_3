@@ -15,6 +15,10 @@ public class User extends BaseEntity{
         super();
     }
 
+    public User(long id) {
+        super(id);
+    }
+
     public User(User user) {
         super(user.getId());
         this.name = user.getName();

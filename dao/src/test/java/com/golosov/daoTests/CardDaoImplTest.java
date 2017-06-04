@@ -29,6 +29,7 @@ import java.util.Set;
 @Transactional
 @ContextConfiguration("/daoContextTest.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Rollback
 public class CardDaoImplTest {
 
 
@@ -81,7 +82,6 @@ public class CardDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testSave() {
 
         long billId = saveBill(bill);
@@ -93,7 +93,6 @@ public class CardDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testDelete() {
 
         long billId = saveBill(bill);
@@ -106,7 +105,6 @@ public class CardDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUpdate() {
 
         long billId = saveBill(bill);
@@ -121,7 +119,6 @@ public class CardDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetById() {
 
         long billId = saveBill(bill);
@@ -132,10 +129,7 @@ public class CardDaoImplTest {
         Assert.assertEquals("testUpdate() method failed: ", actualCard, expectedCard);
     }
 
-    //TODO метод работает. Тест не работает
-    @Ignore
     @Test
-    @Rollback
     public void testGetAllCardsByUserId(){
         saveBill(bill);
         long id = saveUser(user);
@@ -155,12 +149,11 @@ public class CardDaoImplTest {
         saveUser(user);
         saveCard(card);
 
-        Set<Card> cards = cardDao.getAllCardsByUserId(id);
+        List<Card> cards = cardDao.getAllCardsByUserId(id);
         Assert.assertTrue("testGetAllCardsByUserId() method failed: ",cards.size()>=2);
     }
 
     @Test
-    @Rollback
     public void testGetAll(){
         saveBill(bill);
         saveUser(user);
@@ -185,7 +178,6 @@ public class CardDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testBlockCard(){
 
         long billId = saveBill(bill);
@@ -199,7 +191,6 @@ public class CardDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUnblockCard(){
 
         long billId = saveBill(bill);

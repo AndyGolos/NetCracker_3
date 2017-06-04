@@ -19,12 +19,8 @@ public class UserDto extends BaseDto {
     public UserDto() {
     }
 
-    public UserDto(long id, String httpStatus) {
-        super(id, httpStatus);
-    }
-
     public UserDto(long id, String name, String lastname, String surname, String email, String password, String birth, String registration) {
-        super.setId(id);
+        super(id);
         this.name = name;
         this.lastname = lastname;
         this.surname = surname;
@@ -33,7 +29,6 @@ public class UserDto extends BaseDto {
         this.birth = birth;
         this.registration = registration;
     }
-
 
     public String getName() {
         return name;

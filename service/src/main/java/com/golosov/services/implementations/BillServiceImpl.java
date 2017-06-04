@@ -2,12 +2,15 @@ package com.golosov.services.implementations;
 
 import com.golosov.builders.HistoryBuilder;
 import com.golosov.dao.interfaces.BillDao;
+import com.golosov.dao.interfaces.CardDao;
 import com.golosov.dao.interfaces.HistoryDao;
 import com.golosov.entities.Bill;
+import com.golosov.entities.Card;
 import com.golosov.entities.History;
 import com.golosov.exceptions.DaoException;
 import com.golosov.services.dto.Converter;
 import com.golosov.services.dto.dto.BillDto;
+import com.golosov.services.dto.dto.ReplenishDto;
 import com.golosov.services.exceptions.IncorrectPasswordException;
 import com.golosov.services.exceptions.NotFoundException;
 import com.golosov.services.exceptions.ServiceException;
@@ -32,21 +35,35 @@ public class BillServiceImpl implements BillService {
 
     @Autowired
     private BillDao billDao;
+    @Autowired
+    private HistoryDao historyDao;
+    @Autowired
+    private CardDao cardDao;
 
     @Override
-    public void replenishBill(BillDto billDto) {
-        Bill replenishableBill = Converter.billDtoToBillEntityConverter(billDto);
+    public void replenishBill(ReplenishDto replenishDto) {
         try {
-            Bill currentBill = billDao.getById(replenishableBill.getId());
+            Bill currentBill = billDao.getById(replenishDto.getBillId());
+            Card currentCard = cardDao.getById(replenishDto.getCardId());
             if (currentBill == null) {
-                throw new NotFoundException("Bill not found!");
+                throw new NotFoundException("Bill by id: " + replenishDto.getBillId() + " not found!");
+            } else if (currentCard == null) {
+                throw new NotFoundException("Card by id: " + replenishDto.getCardId() + " not found!");
             }
-            if (replenishableBill.getPassword() != null
-                    && replenishableBill.getPassword().equals(currentBill.getPassword())
-                    && replenishableBill.getMoney() > 0) {
-                currentBill.setMoney(currentBill.getMoney() + replenishableBill.getMoney());
+            if (replenishDto.getPassword() != null
+                    && replenishDto.getPassword().equals(currentCard.getPassword())
+                    && replenishDto.getMoney() > 0) {
+                currentBill.setMoney(currentBill.getMoney() + replenishDto.getMoney());
                 billDao.update(currentBill);
                 logger.debug("Bill: " + currentBill + " successfully replenished!");
+                History history = new HistoryBuilder
+                        .HistoryEntityBuilder()
+                        .card(new Card(replenishDto.getCardId()))
+                        .operationTime(Calendar.getInstance())
+                        .valueChange("+" + replenishDto.getMoney())
+                        .build();
+                historyDao.save(history);
+                logger.debug("History: " + history + " successfully saved!");
             } else {
                 throw new IncorrectPasswordException("Incorrect password entered!");
             }
@@ -73,7 +90,7 @@ public class BillServiceImpl implements BillService {
     public void delete(long id) {
         try {
             Bill bill = billDao.getById(id);
-            if(bill == null){
+            if (bill == null) {
                 throw new NotFoundException("Bill not found!");
             }
             billDao.delete(id);
@@ -89,7 +106,7 @@ public class BillServiceImpl implements BillService {
         Bill currentBill = Converter.billDtoToBillEntityConverter(billDto);
         try {
             Bill bill = billDao.getById(id);
-            if(bill == null){
+            if (bill == null) {
                 throw new NotFoundException("Bill not found!");
             }
             currentBill.setId(id);
@@ -123,7 +140,7 @@ public class BillServiceImpl implements BillService {
         BillDto billDto;
         try {
             Bill bill = billDao.getById(id);
-            if(bill == null){
+            if (bill == null) {
                 throw new NotFoundException("Bill not found!");
             }
             logger.debug("Bill by id: " + id + " successfully found!");

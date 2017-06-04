@@ -2,6 +2,7 @@ package com.golosov.dao.interfaces;
 
 import com.golosov.entities.Card;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Set;
  */
 public interface CardDao extends BaseDao<Card> {
 
-    Set<Card> getAllCardsByUserId(long id);
+    List<Card> getAllCardsByUserId(long id);
 
     void blockCard(Card card);
 

@@ -19,6 +19,7 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 @ContextConfiguration("/daoContextTest.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Rollback
 public class TypeDaoImplTest {
 
     @Autowired
@@ -37,7 +38,6 @@ public class TypeDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testSave() {
         long id = typeDao.save(actualType);
 
@@ -46,7 +46,6 @@ public class TypeDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testDelete() {
         long id = typeDao.save(actualType);
 
@@ -57,7 +56,6 @@ public class TypeDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUpdate() {
         long id = typeDao.save(actualType);
 
@@ -69,7 +67,6 @@ public class TypeDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetById() {
         long id = typeDao.save(actualType);
 
@@ -78,7 +75,6 @@ public class TypeDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetAll() {
         typeDao.save(actualType);
 

@@ -22,7 +22,6 @@ public class Converter {
             userDto.setSurname(user.getSurname());
             userDto.setLastname(user.getLastname());
             userDto.setEmail(user.getEmail());
-//            userDto.setPassword(user.getPassword());
             userDto.setBirth(localDateToStringConverter(user.getdateOfBirth()));
             userDto.setRegistration(localDateToStringConverter(user.getRegistration()));
         }
@@ -55,7 +54,7 @@ public class Converter {
             billDto = new BillDto();
             billDto.setId(bill.getId());
             billDto.setMoney(bill.getMoney());
-            billDto.setPassword(bill.getPassword());
+//            billDto.setPassword(bill.getPassword());
         }
         return billDto;
     }
@@ -66,7 +65,6 @@ public class Converter {
             historyDto = new HistoryDto();
             historyDto.setId(history.getId());
             historyDto.setCardId(history.getCard().getId());
-            System.out.println(history.getOperationTime());
             historyDto.setOperationTime(calendarToStringConverter(history.getOperationTime()));
             historyDto.setValueChange(history.getValueChange());
         }
@@ -81,7 +79,6 @@ public class Converter {
             cardDto.setBillId(card.getBill().getId());
             cardDto.setUserId(card.getUser().getId());
             cardDto.setActive(card.isStatus());
-            cardDto.setPassword(card.getPassword());
             cardDto.setType(card.getType().getId());
             LocalDate registration = card.getRegistration();
             cardDto.setRegistration(localDateToStringConverter(registration));
@@ -139,19 +136,12 @@ public class Converter {
 
     public static Card cardDtoToCardEntityConverter(CardDto cardDto) {
         Card card = new Card();
-
-        Bill bill = new Bill();
-        bill.setId(cardDto.getBillId());
+        Bill bill = new Bill(cardDto.getBillId());
         card.setBill(bill);
-
-        User user = new User();
-        user.setId(cardDto.getUserId());
+        User user = new User(cardDto.getUserId());
         card.setUser(user);
-
-        Type type = new Type();
-        type.setId(cardDto.getType());
+        Type type = new Type(cardDto.getType());
         card.setType(type);
-
         card.setId(cardDto.getId());
         card.setPassword(cardDto.getPassword());
         card.setStatus(cardDto.isActive());

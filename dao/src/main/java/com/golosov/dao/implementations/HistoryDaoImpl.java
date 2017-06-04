@@ -8,31 +8,34 @@ import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by Андрей on 16.05.2017.
  */
 @Repository
+@SuppressWarnings("unchecked")
 public class HistoryDaoImpl extends AbstractDao<History> implements HistoryDao {
 
     private static Logger logger = Logger.getLogger(HistoryDaoImpl.class);
 
     private static final String FROM_HISTORY = "from Usage_history";
+    private static final String FROM_HISTORY_BY_CARD_ID = "from Usage_history where card.id = :id";
 
     public HistoryDaoImpl() {
         super(History.class, FROM_HISTORY);
     }
 
     @Override
-    public Set<History> getHistoriesByCardId(long id) {
-        Set<History> histories = null;
+    public List<History> getHistoriesByCardId(long id) {
+        List<History> histories;
         try {
-            Card card = entityManager.find(Card.class, id);
-            if (card != null) {
-                histories = card.getHistories();
-                logger.debug("Card histories with id: " + id + " successfully found!");
-            }
+            histories = entityManager
+                    .createQuery(FROM_HISTORY_BY_CARD_ID)
+                    .setParameter("id", id)
+                    .getResultList();
+            logger.debug("Card histories with id: " + id + " successfully found!");
         } catch (HibernateException e) {
             logger.error("Error was thrown in HistoryDaoImpl method getHistoriesByCardId: " + e);
             throw new DaoException(e);

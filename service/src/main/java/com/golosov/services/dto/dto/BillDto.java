@@ -8,21 +8,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 public class BillDto extends BaseDto {
 
-    private Long money;
+    private long money;
     private String password;
 
-    public BillDto() {
-    }
-
-    public BillDto(long id, String httpStatus) {
-        super(id, httpStatus);
-    }
-
-    public Long getMoney() {
+    public long getMoney() {
         return money;
     }
 
-    public void setMoney(Long money) {
+    public void setMoney(long money) {
         this.money = money;
     }
 
@@ -34,6 +27,21 @@ public class BillDto extends BaseDto {
         this.password = password;
     }
 
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BillDto billDto = (BillDto) o;
+
+        return money == billDto.money;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (money ^ (money >>> 32));
+    }*/
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,15 +49,12 @@ public class BillDto extends BaseDto {
 
         BillDto billDto = (BillDto) o;
 
-        if (money != null ? !money.equals(billDto.money) : billDto.money != null) return false;
-        return password != null ? password.equals(billDto.password) : billDto.password == null;
+        return money == billDto.money;
     }
 
     @Override
     public int hashCode() {
-        int result = money != null ? money.hashCode() : 0;
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        return result;
+        return (int) (money ^ (money >>> 32));
     }
 
     @Override

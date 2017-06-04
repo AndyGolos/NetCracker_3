@@ -1,7 +1,9 @@
 package com.golosov.services.implementations;
 
 import com.golosov.dao.interfaces.RoleDao;
+import com.golosov.dao.interfaces.UserDao;
 import com.golosov.entities.Role;
+import com.golosov.entities.User;
 import com.golosov.exceptions.DaoException;
 import com.golosov.services.dto.Converter;
 import com.golosov.services.dto.dto.RoleDto;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Андрей on 17.05.2017.
@@ -27,6 +31,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public long save(RoleDto roleDto) {
@@ -105,5 +111,25 @@ public class RoleServiceImpl implements RoleService {
             throw new ServiceException(e);
         }
         return roleDto;
+    }
+
+    @Override
+    public Set<RoleDto> userRoles(long id) {
+        Set<RoleDto> roles = new HashSet<>();
+        try {
+            User user = userDao.getById(id);
+            if (user == null) {
+                throw new NotFoundException("User not found!");
+            }
+            logger.debug("User successfully found!");
+            user.getRoles().forEach(role -> {
+                RoleDto roleDto = Converter.roleEntityToRoleDtoConverter(role);
+                roles.add(roleDto);
+            });
+        } catch (DaoException e) {
+            logger.error("Error was thrown in role service method role getAll: " + e);
+            throw new ServiceException(e);
+        }
+        return roles;
     }
 }

@@ -66,7 +66,7 @@ public class CardServiceImplTest {
 
         billDto = new BillDto();
         billDto.setPassword("Hello");
-        billDto.setMoney(1000L);
+        billDto.setMoney(1000);
 
         typeDto = new TypeDto();
         typeDto.setType("SuperCard");
@@ -154,9 +154,7 @@ public class CardServiceImplTest {
         Assert.assertEquals("testGetById() method failed: ", actualCardDto, expectedCardDto);
     }
 
-    @Ignore
     @Test
-    //TODO метод работает. Тест - нет:D
     public void testTransferMoney() {
         long billId = billService.save(billDto);
         long typeId = typeService.save(typeDto);
@@ -182,7 +180,7 @@ public class CardServiceImplTest {
 
         BillDto fromBill  = billService.get(billId);
         BillDto toBill = billService.get(billtransferId);
-        Assert.assertTrue("testTransferMoney() method failed: ", fromBill.getMoney() + toBill.getMoney() == 1000);
+        Assert.assertTrue("testTransferMoney() method failed: ", fromBill.getMoney() + toBill.getMoney() == 2000);
     }
 
     @After

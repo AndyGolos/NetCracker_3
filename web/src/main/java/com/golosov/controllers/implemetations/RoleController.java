@@ -1,10 +1,10 @@
 package com.golosov.controllers.implemetations;
 
 import com.golosov.controllers.abstracts.AbstractCrudController;
+import com.golosov.controllers.responses.SuccessResponse;
 import com.golosov.services.dto.dto.RoleDto;
 import com.golosov.services.interfaces.BaseService;
 import com.golosov.services.interfaces.RoleService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/roles")
 public class RoleController extends AbstractCrudController<RoleDto> {
 
-    @Autowired
     private RoleService roleService;
 
+    @Autowired
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<RoleDto> saveRole(@RequestBody RoleDto roleDto) {
+    public ResponseEntity<SuccessResponse> saveRole(@RequestBody RoleDto roleDto) {
         return save(roleDto);
     }
 
@@ -32,10 +36,5 @@ public class RoleController extends AbstractCrudController<RoleDto> {
     @Override
     protected BaseService<RoleDto> getService() {
         return roleService;
-    }
-
-    @Override
-    protected RoleDto getResponseDto() {
-        return new RoleDto();
     }
 }

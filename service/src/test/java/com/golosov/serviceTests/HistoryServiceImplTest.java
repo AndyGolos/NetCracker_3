@@ -63,13 +63,13 @@ public class HistoryServiceImplTest {
 
         billDto = new BillDto();
         billDto.setPassword("Hello");
-        billDto.setMoney(1000L);
+        billDto.setMoney(1000);
 
         typeDto = new TypeDto();
         typeDto.setType("SuperCard");
 
         actualHistoryDto = new HistoryDto();
-        actualHistoryDto.setOperationTime(/*"12.12.2016 08:12:12"*/ calendarToStringConverter(Calendar.getInstance()));
+        actualHistoryDto.setOperationTime(calendarToStringConverter(Calendar.getInstance()));
         actualHistoryDto.setValueChange("+200");
     }
 
@@ -119,12 +119,6 @@ public class HistoryServiceImplTest {
 
         List<HistoryDto> histories = historyService.getAll();
         Assert.assertTrue("testGetAll() method failed: ", histories.size() >= 2);
-    }
-
-    @Ignore
-    @Test
-    public void testFindCardHistory() {
-
     }
 
     @After

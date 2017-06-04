@@ -14,16 +14,17 @@ import java.util.List;
  */
 public class CustomUserDetails extends User implements UserDetails {
 
-    private final String ROLE_PREFIX = "ROLE_";
+    private static final String ROLE_PREFIX = "ROLE_";
+    private User user;
 
     CustomUserDetails(User user) {
-        super(user);
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<>();
-        super.getRoles().forEach(role -> {
+        user.getRoles().forEach(role -> {
             list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getRole()));
         });
         return list;
@@ -31,12 +32,17 @@ public class CustomUserDetails extends User implements UserDetails {
 
     @Override
     public long getId() {
-        return super.getId();
+        return user.getId();
     }
 
     @Override
     public String getUsername() {
-        return super.getEmail();
+        return user.getEmail();
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
     }
 
     @Override

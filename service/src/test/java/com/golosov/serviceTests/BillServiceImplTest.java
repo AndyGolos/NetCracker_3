@@ -32,7 +32,7 @@ public class BillServiceImplTest {
     public void setUp() {
         actualBillDto = new BillDto();
         actualBillDto.setPassword("Hello");
-        actualBillDto.setMoney(1000L);
+        actualBillDto.setMoney(1000);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class BillServiceImplTest {
     public void testUpdate() {
         long id = billService.save(actualBillDto);
 
-        actualBillDto.setMoney(1000000L);
+        actualBillDto.setMoney(1000000);
         billService.update(actualBillDto, id);
 
         expectedBillDto = billService.get(id);
@@ -68,7 +68,7 @@ public class BillServiceImplTest {
     public void testGetAll() {
         long id = billService.save(actualBillDto);
 
-        actualBillDto.setMoney(200L);
+        actualBillDto.setMoney(200);
         billService.save(actualBillDto);
 
         List<BillDto> bills = billService.getAll();
@@ -81,12 +81,6 @@ public class BillServiceImplTest {
 
         expectedBillDto = billService.get(id);
         Assert.assertEquals("testGetById() method failed: ", actualBillDto, expectedBillDto);
-    }
-
-    @Ignore
-    @Test
-    public void testReplenish() {
-
     }
 
     @After

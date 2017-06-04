@@ -2,6 +2,7 @@ package com.golosov.services.interfaces;
 
 import com.golosov.services.dto.dto.HistoryDto;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,5 +10,5 @@ import java.util.Set;
  */
 public interface HistoryService extends BaseService<HistoryDto> {
 
-    Set<HistoryDto> findCardHistory(long cardId);
+    List<HistoryDto> findCardHistory(long cardId);
 }

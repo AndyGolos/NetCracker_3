@@ -16,6 +16,10 @@ public class Bill extends BaseEntity {
         super();
     }
 
+    public Bill(long id) {
+        super(id);
+    }
+
     @Column
     @ColumnDefault("0")
     private long money;

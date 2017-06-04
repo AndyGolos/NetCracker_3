@@ -19,6 +19,7 @@ import java.util.List;
 @Transactional
 @ContextConfiguration("/daoContextTest.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Rollback
 public class BillDaoImplTest {
 
     @Autowired
@@ -38,7 +39,6 @@ public class BillDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testSave() {
         long id = billDao.save(actualBill);
 
@@ -47,7 +47,6 @@ public class BillDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testDelete() {
         long id = billDao.save(actualBill);
 
@@ -58,7 +57,6 @@ public class BillDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUpdate() {
         long id = billDao.save(actualBill);
 
@@ -70,7 +68,6 @@ public class BillDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetById() {
         long id = billDao.save(actualBill);
 
@@ -79,7 +76,6 @@ public class BillDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetAll() {
         billDao.save(actualBill);
 
@@ -96,7 +92,6 @@ public class BillDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testSetMoney() {
         long id = billDao.save(actualBill);
         long money = 200;

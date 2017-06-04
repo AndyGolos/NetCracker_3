@@ -42,14 +42,10 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    //TODO сделать только для авторизированнго пользователя?
-    public Set<HistoryDto> findCardHistory(long cardId) {
-        Set<HistoryDto> historyDtos = new HashSet<>();
+    public List<HistoryDto> findCardHistory(long cardId) {
+        List<HistoryDto> historyDtos = new ArrayList<>();
         try {
-            Set<History> histories = historyDao.getHistoriesByCardId(cardId);
-            /*if(histories == null){
-                throw new NotFoundException("Histories not found!");
-            }*/
+            List<History> histories = historyDao.getHistoriesByCardId(cardId);
             logger.debug("All histories card with id: " + cardId + " successfully found!");
             histories.forEach(history -> {
                 HistoryDto historyDto = Converter.historyEntityToHistoryDtoConverter(history);

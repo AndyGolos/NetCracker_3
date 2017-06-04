@@ -14,6 +14,10 @@ public class Type extends BaseEntity {
         super();
     }
 
+    public Type(long id) {
+        super(id);
+    }
+
     @Column
     private String type;
     public String getType() {

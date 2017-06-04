@@ -24,6 +24,7 @@ import java.util.List;
 @Transactional
 @ContextConfiguration("/daoContextTest.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Rollback
 public class HistoryDaoImplTest {
 
     @Autowired
@@ -86,7 +87,6 @@ public class HistoryDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testSave() {
         saveBill(bill);
         saveUser(user);
@@ -98,7 +98,6 @@ public class HistoryDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testDelete() {
         saveBill(bill);
         saveUser(user);
@@ -112,7 +111,6 @@ public class HistoryDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUpdate() {
         saveBill(bill);
         saveUser(user);
@@ -127,7 +125,6 @@ public class HistoryDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetById() {
         saveBill(bill);
         saveUser(user);
@@ -139,7 +136,6 @@ public class HistoryDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetAll(){
         saveBill(bill);
         saveUser(user);
@@ -156,14 +152,6 @@ public class HistoryDaoImplTest {
 
         List<History> histories = historyDao.getAll();
         Assert.assertTrue("testGetById() method failed: ",histories.size()>=2);
-    }
-
-    //TODO
-    @Ignore
-    @Test
-    @Rollback
-    public void testGetHistoriesByCardId(){
-
     }
 
     @After

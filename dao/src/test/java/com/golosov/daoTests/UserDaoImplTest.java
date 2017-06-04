@@ -23,6 +23,7 @@ import java.util.List;
 @Transactional
 @ContextConfiguration("/daoContextTest.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Rollback
 public class UserDaoImplTest {
 
     @Autowired
@@ -46,7 +47,6 @@ public class UserDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testSave() {
         long id = userDao.save(actualUser);
 
@@ -56,7 +56,6 @@ public class UserDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testFindByEmail() {
         long id = userDao.save(actualUser);
 
@@ -65,7 +64,6 @@ public class UserDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testDelete() {
         userDao.save(actualUser);
 
@@ -76,7 +74,6 @@ public class UserDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetById() {
         long id = userDao.save(actualUser);
 
@@ -85,7 +82,6 @@ public class UserDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUpdate() {
         long id = userDao.save(actualUser);
 
@@ -98,7 +94,6 @@ public class UserDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testGetAll() {
         userDao.save(actualUser);
 

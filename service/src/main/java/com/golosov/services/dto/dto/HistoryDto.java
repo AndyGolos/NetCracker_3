@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * Created by Андрей on 18.05.2017.
  */
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class HistoryDto extends BaseDto{
 
     private long cardId;

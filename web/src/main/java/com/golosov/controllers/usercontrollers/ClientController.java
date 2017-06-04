@@ -1,5 +1,8 @@
 package com.golosov.controllers.usercontrollers;
 
+import com.golosov.controllers.abstracts.BaseController;
+import com.golosov.controllers.exceptions.NoAccessException;
+import com.golosov.controllers.responses.SuccessResponse;
 import com.golosov.security.details.CustomUserDetails;
 import com.golosov.services.dto.dto.*;
 import com.golosov.services.interfaces.BillService;
@@ -10,11 +13,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,20 +24,28 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/api")
-public class ClientController {
+public class ClientController extends BaseController {
 
     private final Logger logger = Logger.getLogger(ClientController.class);
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private CardService cardService;
-    @Autowired
     private BillService billService;
-    @Autowired
     private HistoryService historyService;
 
-    //работает
+    @Autowired
+    public ClientController(
+            UserService userService,
+            CardService cardService,
+            BillService billService,
+            HistoryService historyService
+    ) {
+        this.userService = userService;
+        this.cardService = cardService;
+        this.billService = billService;
+        this.historyService = historyService;
+    }
+
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ResponseEntity<UserDto> getUser() {
         long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -44,48 +54,61 @@ public class ClientController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //Работает
+    @RequestMapping(value = "/users/cards", method = RequestMethod.GET)
+    public ResponseEntity<List<CardDto>> getUserCards() {
+        long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        List<CardDto> cards = cardService.findUsersCards(userId);
+        return new ResponseEntity<>(cards, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/cards/blockCard/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<CardDto> blockCard(@PathVariable long id) {
-        //TODO только для пользователя.
+    public ResponseEntity<SuccessResponse> blockCard(@PathVariable long id) {
+        cardAccessRights(id);
         cardService.blockCard(id);
         logger.debug("Card successfully blocked!");
-        return new ResponseEntity<>(new CardDto(id, HttpStatus.OK.toString()), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponse(id, HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
-    //Работает
     @RequestMapping(value = "/bills/replenishBill", method = RequestMethod.POST)
-    public ResponseEntity<BillDto> replenishBill(@RequestBody BillDto billDto) {
-        billService.replenishBill(billDto);
+    public ResponseEntity<SuccessResponse> replenishBill(@RequestBody ReplenishDto replenishDto) {
+        billService.replenishBill(replenishDto);
         logger.debug("Bill successfully replenished!");
-        return new ResponseEntity<>(new BillDto(billDto.getId(), HttpStatus.OK.toString()), HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponse(replenishDto.getCardId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
-    //Работает
-    //TODO добавить response entity?
     @RequestMapping(value = "/cards/transferMoney", method = RequestMethod.POST)
-    public ResponseEntity transferMoney(@RequestBody TransferDto transferDto) {
-        //TODO только для пользователя.
+    public ResponseEntity<SuccessResponse> transferMoney(@RequestBody TransferDto transferDto) {
+        cardAccessRights(transferDto.getFromCardId());
         cardService.transferMoney(transferDto);
         logger.debug("Money successfully transfered!");
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new SuccessResponse(transferDto.getFromCardId(), HttpStatus.OK.toString()), HttpStatus.OK);
     }
 
-    //Работает
+    //Только клиент может создавать себе карточку.
     @RequestMapping(value = "/cards/createCard", method = RequestMethod.POST)
-    public ResponseEntity<CardDto> createCard(@RequestBody CardDto cardDto) {
-        //TODO только для пользователя.
+    public ResponseEntity<SuccessResponse> createCard(@RequestBody CardDto cardDto) {
+        long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        if (!(cardDto.getUserId() == userId)) {
+            throw new NoAccessException("Access denied!");
+        }
         long cardId = cardService.save(cardDto);
         logger.debug("Card successfully created!");
-        return new ResponseEntity<>(new CardDto(cardId, HttpStatus.CREATED.toString()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SuccessResponse(cardId, HttpStatus.CREATED.toString()), HttpStatus.CREATED);
     }
 
-    //Работает
     @RequestMapping(value = "/cards/{cardId}/histories", method = RequestMethod.GET)
-    public ResponseEntity<Set<HistoryDto>> getHistoriesOfCard(@PathVariable long cardId) {
-        //TODO только для пользователя.
-        Set<HistoryDto> histories = historyService.findCardHistory(cardId);
+    public ResponseEntity<List<HistoryDto>> getHistoriesOfCard(@PathVariable long cardId) {
+        cardAccessRights(cardId);
+        List<HistoryDto> histories = historyService.findCardHistory(cardId);
         logger.debug("Histories successfully found!");
         return new ResponseEntity<>(histories, HttpStatus.OK);
+    }
+
+    private void cardAccessRights(long cardId) {
+        long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        CardDto card = cardService.get(cardId);
+        if (!(card.getUserId() == userId)) {
+            throw new NoAccessException("Access denied!");
+        }
     }
 }

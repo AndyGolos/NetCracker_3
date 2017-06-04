@@ -35,14 +35,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService);
     }
 
-    //TODO разобраться
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/api/login").permitAll()
-                .antMatchers("/api/register").permitAll()
-
+                .antMatchers("/api/login").anonymous()
+                .antMatchers("/api/register").anonymous()
                 .antMatchers(
                         "/api/types/**",
                         "/api/bills/**",
@@ -51,33 +49,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/roles/**",
                         "/api/users/**")
                 .hasRole("Администратор")
-
-                /*.antMatchers("/bills*//**").hasRole("Администратор")
-                .antMatchers("/cards*//**").hasRole("Администратор")
-                .antMatchers("/histories*//**").hasRole("Администратор")
-                .antMatchers("/roles*//**").hasRole("Администратор")
-                .antMatchers("/users*//**").hasRole("Администратор")*/
-
                 .antMatchers(
                         "/api/users/profile",
                         "/api/cards/blockCard/*",
                         "/api/bills/replenishBill",
                         "/api/cards/transferMoney",
                         "/api/cards/createCard",
-                        "/api/cards/*/histories"
-                ).hasRole("Клиент")
+                        "/api/cards/*/histories")
+                .hasRole("Клиент")
 
-//                .antMatchers("/admin/**").hasRole("Администратор")
-//                .antMatchers("/client/**").hasRole("Клиент")
-
-//                .anyRequest().authenticated()
                 .and()
                 .logout()
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+
                 .and()
                 .csrf()
                 .disable();

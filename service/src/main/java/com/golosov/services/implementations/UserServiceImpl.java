@@ -150,4 +150,25 @@ public class UserServiceImpl implements UserService {
             return user.getId();
         }
     }
+
+    @Override
+    public long saveAdmin(UserDto userDto) {
+        User admin = Converter.userDtoToTypeEntityConverter(userDto);
+        try {
+            User user = userDao.getByEmail(admin.getEmail());
+            if (user != null) {
+                throw new ExistUserException("Such user is already exists!");
+            }
+            Set<Role> roles = new HashSet<>();
+            roles.add(new Role(2));
+            admin.setRoles(roles);
+            admin.setRegistration(LocalDate.now());
+            userDao.save(admin);
+            logger.debug("Admin: " + admin + " successfully saved!");
+        } catch (DaoException e) {
+            logger.error("Error was thrown in UserServiceImpl method save: " + e);
+            throw new ServiceException(e);
+        }
+        return admin.getId();
+    }
 }

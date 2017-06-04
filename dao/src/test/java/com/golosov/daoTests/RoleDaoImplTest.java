@@ -19,6 +19,7 @@ import java.util.List;
 @Transactional
 @ContextConfiguration("/daoContextTest.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Rollback
 public class RoleDaoImplTest {
 
     @Autowired
@@ -37,7 +38,6 @@ public class RoleDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testSave() {
         long id = roleDao.save(actualRole);
 
@@ -46,7 +46,6 @@ public class RoleDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testDelete() {
         long id = roleDao.save(actualRole);
 
@@ -57,7 +56,6 @@ public class RoleDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testUpdate() {
         long id = roleDao.save(actualRole);
 
@@ -70,7 +68,6 @@ public class RoleDaoImplTest {
 
 
     @Test
-    @Rollback
     public void testGetAll() {
         roleDao.save(actualRole);
 
@@ -85,21 +82,11 @@ public class RoleDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testGetById() {
         long id = roleDao.save(actualRole);
 
         expectedRole = roleDao.getById(id);
         Assert.assertEquals("testGetById() method failed: ", actualRole, expectedRole);
-    }
-
-    //TODO
-    @Ignore
-    @Test
-    @Rollback
-    public void testGetRolesByUserId() {
-        long id = roleDao.save(actualRole);
-//      userRoles = roleDao.getRolesById();
     }
 
     @After

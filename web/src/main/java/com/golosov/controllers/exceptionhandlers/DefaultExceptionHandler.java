@@ -1,10 +1,8 @@
 package com.golosov.controllers.exceptionhandlers;
 
-import com.golosov.services.dto.exceptionDto.FailedResponseDto;
-import com.golosov.services.exceptions.ExistUserException;
-import com.golosov.services.exceptions.IncorrectPasswordException;
-import com.golosov.services.exceptions.NotEnoughMoneyException;
-import com.golosov.services.exceptions.NotFoundException;
+import com.golosov.controllers.exceptions.NoAccessException;
+import com.golosov.controllers.responses.FailedResponse;
+import com.golosov.services.exceptions.*;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,29 +17,36 @@ public class DefaultExceptionHandler {
 
     private final Logger logger = Logger.getLogger(DefaultExceptionHandler.class);
 
-
     @ExceptionHandler(value = NotFoundException.class)
-    public ResponseEntity<FailedResponseDto> notFoundHandler(Exception e) throws Exception {
+    public ResponseEntity<FailedResponse> notFoundHandler(Exception e) throws Exception {
         logger.error(e.getMessage());
-        FailedResponseDto failedResponseDto = new FailedResponseDto(e.getMessage(), HttpStatus.NOT_FOUND.toString());
-        return new ResponseEntity<>(failedResponseDto, HttpStatus.NOT_FOUND);
+        FailedResponse failedResponse = new FailedResponse(e.getMessage(), HttpStatus.NOT_FOUND.toString());
+        return new ResponseEntity<>(failedResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = NoAccessException.class)
+    public ResponseEntity<FailedResponse> noAccessHandler(Exception e) throws Exception {
+        logger.error(e.getMessage());
+        FailedResponse failedResponse = new FailedResponse(e.getMessage(), HttpStatus.FORBIDDEN.toString());
+        return new ResponseEntity<>(failedResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(value = {
             IncorrectPasswordException.class,
             ExistUserException.class,
-            NotEnoughMoneyException.class})
-    public ResponseEntity<FailedResponseDto> runtimeHandler(Exception e) throws Exception {
+            NotEnoughMoneyException.class,
+            CardStatusException.class
+    })
+    public ResponseEntity<FailedResponse> runtimeHandler(Exception e) throws Exception {
         logger.error(e.getMessage());
-        FailedResponseDto failedResponseDto = new FailedResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.toString());
-        return new ResponseEntity<>(failedResponseDto, HttpStatus.BAD_REQUEST);
+        FailedResponse failedResponse = new FailedResponse(e.getMessage(), HttpStatus.BAD_REQUEST.toString());
+        return new ResponseEntity<>(failedResponse, HttpStatus.BAD_REQUEST);
     }
 
-    //TODO?
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<FailedResponseDto> exceptionHandler(Exception e) throws Exception {
+    public ResponseEntity<FailedResponse> exceptionHandler(Exception e) throws Exception {
         logger.error(e.getMessage());
-        FailedResponseDto failedResponseDto = new FailedResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.toString());
-        return new ResponseEntity<>(failedResponseDto, HttpStatus.BAD_REQUEST);
+        FailedResponse failedResponse = new FailedResponse(e.getMessage(), HttpStatus.BAD_REQUEST.toString());
+        return new ResponseEntity<>(failedResponse, HttpStatus.BAD_REQUEST);
     }
 }

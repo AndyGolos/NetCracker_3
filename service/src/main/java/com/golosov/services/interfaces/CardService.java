@@ -3,6 +3,7 @@ package com.golosov.services.interfaces;
 import com.golosov.services.dto.dto.CardDto;
 import com.golosov.services.dto.dto.TransferDto;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Set;
  */
 public interface CardService extends BaseService<CardDto> {
 
-    Set<CardDto> findUsersCards(long id);
+    List<CardDto> findUsersCards(long id);
 
     void unblockCard(long id);
 

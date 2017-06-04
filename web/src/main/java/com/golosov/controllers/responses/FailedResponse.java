@@ -1,17 +1,17 @@
-package com.golosov.services.dto.exceptionDto;
+package com.golosov.controllers.responses;
 
 /**
  * Created by Андрей on 01.06.2017.
  */
-public class FailedResponseDto {
+public class FailedResponse {
 
     private String massage;
     private String status;
 
-    public FailedResponseDto() {
+    public FailedResponse() {
     }
 
-    public FailedResponseDto(String massage, String status) {
+    public FailedResponse(String massage, String status) {
         this.massage = massage;
         this.status = status;
     }

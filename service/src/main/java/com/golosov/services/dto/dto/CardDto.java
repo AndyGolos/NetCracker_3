@@ -5,24 +5,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * Created by Андрей on 18.05.2017.
  */
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class CardDto extends BaseDto {
 
     private long billId;
     private long userId;
     private long type;
     private String password;
-    //TODO не выводит , если статус = false
     private boolean isActive;
     private String registration;
     private String validity;
-
-    public CardDto() {
-    }
-
-    public CardDto(long id, String httpStatus) {
-        super(id, httpStatus);
-    }
 
     public long getBillId() {
         return billId;
@@ -80,6 +71,33 @@ public class CardDto extends BaseDto {
         this.validity = validity;
     }
 
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CardDto cardDto = (CardDto) o;
+
+        if (billId != cardDto.billId) return false;
+        if (userId != cardDto.userId) return false;
+        if (type != cardDto.type) return false;
+        if (isActive != null ? !isActive.equals(cardDto.isActive) : cardDto.isActive != null) return false;
+        if (registration != null ? !registration.equals(cardDto.registration) : cardDto.registration != null)
+            return false;
+        return validity != null ? validity.equals(cardDto.validity) : cardDto.validity == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (billId ^ (billId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (type ^ (type >>> 32));
+        result = 31 * result + (isActive != null ? isActive.hashCode() : 0);
+        result = 31 * result + (registration != null ? registration.hashCode() : 0);
+        result = 31 * result + (validity != null ? validity.hashCode() : 0);
+        return result;
+    }*/
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,7 +109,6 @@ public class CardDto extends BaseDto {
         if (userId != cardDto.userId) return false;
         if (type != cardDto.type) return false;
         if (isActive != cardDto.isActive) return false;
-        if (password != null ? !password.equals(cardDto.password) : cardDto.password != null) return false;
         if (registration != null ? !registration.equals(cardDto.registration) : cardDto.registration != null)
             return false;
         return validity != null ? validity.equals(cardDto.validity) : cardDto.validity == null;
@@ -102,7 +119,6 @@ public class CardDto extends BaseDto {
         int result = (int) (billId ^ (billId >>> 32));
         result = 31 * result + (int) (userId ^ (userId >>> 32));
         result = 31 * result + (int) (type ^ (type >>> 32));
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (isActive ? 1 : 0);
         result = 31 * result + (registration != null ? registration.hashCode() : 0);
         result = 31 * result + (validity != null ? validity.hashCode() : 0);
